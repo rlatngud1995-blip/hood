@@ -12,16 +12,15 @@ export const metadata: Metadata = {
       "후드의정석 | 전국 주방후드·렌지후드·후황 교체",
   },
   description:
-    "전국 주방후드 교체 전문 상담 후드의정석. " +
-    "렌지후드, 후황, 아일랜드후드, 침니후드, " +
-    "빌트인후드, 슬림후드, 허리케인후드 교체. " +
-    "시공 전후 사진과 지역별 안내를 확인하세요.",
+    "전국 주방후드 교체 상담 후드의정석. " +
+    "렌지후드, 후황, 빌트인후드, 슬림후드, " +
+    "허리케인후드, 아일랜드후드, 침니후드 교체. " +
+    "지역별 후드 교체 안내 및 전화상담.",
   alternates: {
     canonical: SITE.url,
   },
   openGraph: {
-    title:
-      "후드의정석 | 전국 주방후드 교체",
+    title: "후드의정석 | 전국 주방후드 교체",
     description:
       "주방후드, 렌지후드, 후황, " +
       "아일랜드후드, 침니후드 교체 상담",
@@ -32,32 +31,18 @@ export const metadata: Metadata = {
   },
 };
 
-const photos = {
-  kitchen:
-    "/12B08037-6AD2-4EF2-AB3F-2F9FAA2EE6A2.png",
-
-  island:
-    "/310B47AA-B344-4A17-9160-AC277DBF595E.png",
-
-  chimney:
-    "/10D74E67-C29E-41AD-85D7-64D8092D6C4D.png",
-
-  additional:
-    "/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png",
-};
-
 const categories = [
   {
     title: "주방후드 교체",
     subtitle: "KITCHEN HOOD",
+    image:
+      "/12B08037-6AD2-4EF2-AB3F-2F9FAA2EE6A2.png",
+    alt: "가정집 주방후드 교체 전후 비교",
+    href: "/services/kitchen-hood",
     description:
       "가정집, 아파트, 빌라의 주방후드와 " +
       "렌지후드, 후황, 슬림후드, " +
       "빌트인후드 교체 상담.",
-    image: photos.kitchen,
-    alt:
-      "가정집 주방후드 교체 시공 전후 비교 사진",
-    href: "/services/kitchen-hood",
     keywords: [
       "렌지후드 교체",
       "후황 교체",
@@ -69,14 +54,14 @@ const categories = [
   {
     title: "아일랜드후드 교체",
     subtitle: "ISLAND HOOD",
-    description:
-      "천장에 고정된 아일랜드형 주방후드의 " +
-      "교체 상담. 설치 높이, 천장 고정 구조와 " +
-      "배기 연결 상태를 확인합니다.",
-    image: photos.island,
-    alt:
-      "아일랜드 주방후드 교체 시공 전후 비교 사진",
+    image:
+      "/310B47AA-B344-4A17-9160-AC277DBF595E.png",
+    alt: "아일랜드후드 교체 전후 비교",
     href: "/services/island-hood",
+    description:
+      "천장에 설치된 아일랜드형 주방후드의 " +
+      "교체 상담. 천장 고정 구조와 " +
+      "배기 연결 상태를 확인합니다.",
     keywords: [
       "아일랜드 렌지후드",
       "천장형 후드",
@@ -86,14 +71,14 @@ const categories = [
   {
     title: "침니후드 교체",
     subtitle: "CHIMNEY HOOD",
+    image:
+      "/10D74E67-C29E-41AD-85D7-64D8092D6C4D.png",
+    alt: "침니형 주방후드 교체 전후 비교",
+    href: "/services/chimney-hood",
     description:
       "벽면에 설치된 침니형, 데코형, " +
-      "굴뚝형 주방후드의 교체 상담. " +
+      "굴뚝형 주방후드 교체 상담. " +
       "제품 규격과 배기덕트 연결을 확인합니다.",
-    image: photos.chimney,
-    alt:
-      "침니형 주방후드 교체 시공 전후 비교 사진",
-    href: "/services/chimney-hood",
     keywords: [
       "침니 렌지후드",
       "데코후드 교체",
@@ -102,62 +87,35 @@ const categories = [
   },
 ];
 
-const gallery = [
-  {
-    image: photos.additional,
-    title: "주방 환기후드 교체",
-    alt:
-      "주방 환기후드 시공 후와 시공 전 비교",
-  },
-  {
-    image: photos.kitchen,
-    title: "가정집 주방후드 교체",
-    alt:
-      "가정집 렌지후드 교체 전후 비교",
-  },
-  {
-    image: photos.island,
-    title: "아일랜드후드 교체",
-    alt:
-      "아일랜드후드 교체 전후 비교",
-  },
-  {
-    image: photos.chimney,
-    title: "침니후드 교체",
-    alt:
-      "침니후드 교체 전후 비교",
-  },
-];
-
 const faqs = [
   {
     question: "오래된 주방후드도 교체할 수 있나요?",
     answer:
-      "기존 후드의 설치 규격과 공간이 " +
-      "적합하면 교체를 검토할 수 있습니다. " +
-      "제품 모델명과 사진을 확인하는 것이 좋습니다.",
+      "기존 후드의 설치 규격과 공간이 적합하면 " +
+      "교체를 검토할 수 있습니다. " +
+      "제품 모델명과 설치 사진을 확인해야 합니다.",
   },
   {
     question: "후황과 렌지후드는 같은 건가요?",
     answer:
-      "후황, 렌지후드, 레인지후드 등은 " +
+      "후황, 렌지후드, 레인지후드는 " +
       "주방 환기후드를 가리키는 표현으로 " +
       "사용됩니다. 실제 제품 종류는 " +
-      "모델과 설치 형태에 따라 구분됩니다.",
+      "설치 형태에 따라 구분됩니다.",
   },
   {
     question: "후드 교체 비용은 얼마인가요?",
     answer:
-      "후드 제품 종류, 기존 제품 철거, " +
-      "배기덕트 연결과 추가 마감 작업에 " +
-      "따라 달라집니다. 설치 사진을 바탕으로 " +
-      "작업 범위를 확인해야 합니다.",
+      "제품 종류, 기존 후드 철거 난이도, " +
+      "배기덕트 연결 및 추가 마감 작업에 " +
+      "따라 비용이 달라집니다.",
   },
   {
-    question: "아일랜드후드도 교체 상담이 가능한가요?",
+    question: "아일랜드후드도 교체할 수 있나요?",
     answer:
-      "네. 천장 고정 구조와 배기 연결 상태, " +
-      "교체 제품의 규격을 확인하여 상담합니다.",
+      "천장 고정 구조와 배기 연결 상태, " +
+      "교체 제품의 규격을 확인한 뒤 " +
+      "교체 가능 여부를 검토합니다.",
   },
 ];
 
@@ -166,13 +124,6 @@ const container = {
   margin: "0 auto",
   paddingLeft: 20,
   paddingRight: 20,
-};
-
-const grid = {
-  display: "grid",
-  gridTemplateColumns:
-    "repeat(auto-fit, minmax(min(100%, 290px), 1fr))",
-  gap: 20,
 };
 
 export default function HomePage() {
@@ -185,9 +136,6 @@ export default function HomePage() {
         name: SITE.name,
         url: SITE.url,
         telephone: SITE.phone,
-        description:
-          "전국 주방후드, 렌지후드, 후황, " +
-          "아일랜드후드 및 침니후드 교체 상담",
       },
       {
         "@type": "WebSite",
@@ -341,12 +289,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SERVICE CATEGORIES */}
+      {/* THREE SERVICE CATEGORIES */}
       <section
         style={{
           ...container,
           paddingTop: 75,
-          paddingBottom: 70,
+          paddingBottom: 75,
         }}
       >
         <div
@@ -382,12 +330,19 @@ export default function HomePage() {
               fontSize: 14,
             }}
           >
-            실제 시공 전후 사진으로
-            후드 교체 사례를 확인하세요.
+            주방 구조와 후드 종류에 맞는
+            교체 서비스를 확인하세요.
           </p>
         </div>
 
-        <div style={grid}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(min(100%, 290px), 1fr))",
+            gap: 20,
+          }}
+        >
           {categories.map((item) => (
             <article
               key={item.title}
@@ -412,7 +367,7 @@ export default function HomePage() {
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   style={{
-                    objectFit: "cover",
+                    objectFit: "contain",
                   }}
                 />
               </div>
@@ -496,7 +451,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* BEFORE AFTER GALLERY */}
+      {/* NATIONWIDE REGIONS */}
       <section
         style={{
           background: "#f0ece4",
@@ -507,39 +462,27 @@ export default function HomePage() {
           <div
             style={{
               textAlign: "center",
-              marginBottom: 35,
+              marginBottom: 30,
             }}
           >
-            <p
-              style={{
-                color: "#a78047",
-                fontWeight: 900,
-                fontSize: 12,
-                letterSpacing: "2px",
-              }}
-            >
-              BEFORE & AFTER
-            </p>
-
             <h2
               style={{
-                fontSize: 30,
-                margin: "12px 0",
+                fontSize: 29,
+                margin: "0 0 13px",
               }}
             >
-              실제 후드 교체 시공 사례
+              전국 지역별 후드 교체
             </h2>
 
             <p
               style={{
                 color: "#666",
-                lineHeight: 1.8,
                 fontSize: 14,
+                lineHeight: 1.9,
               }}
             >
-              기존 주방후드 철거부터
-              새로운 후드 설치까지
-              전후 모습을 확인하세요.
+              지역을 선택하면 시·군·구별
+              후드 교체 안내를 확인할 수 있습니다.
             </p>
           </div>
 
@@ -547,136 +490,49 @@ export default function HomePage() {
             style={{
               display: "grid",
               gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 360px), 1fr))",
-              gap: 20,
+                "repeat(auto-fit, minmax(min(100%, 160px), 1fr))",
+              gap: 10,
             }}
           >
-            {gallery.map((item) => (
-              <figure
-                key={item.image}
+            {regions.map((region) => (
+              <Link
+                key={region.slug}
+                href={`/area/${region.slug}`}
                 style={{
-                  margin: 0,
+                  display: "block",
                   background: "#fff",
-                  borderRadius: 12,
-                  overflow: "hidden",
+                  border: "1px solid #e5e1d9",
+                  borderRadius: 9,
+                  padding: "17px 12px",
+                  textAlign: "center",
+                  color: "#333",
+                  textDecoration: "none",
+                  fontWeight: 800,
+                  fontSize: 14,
                 }}
               >
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    aspectRatio: "4 / 3",
-                  }}
-                >
-                  <Image
-                    src={item.image}
-                    alt={item.alt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    style={{
-                      objectFit: "contain",
-                      background: "#eaeaea",
-                    }}
-                  />
-                </div>
-
-                <figcaption
-                  style={{
-                    padding: "17px 20px",
-                    fontSize: 15,
-                    fontWeight: 800,
-                  }}
-                >
-                  {item.title}
-                </figcaption>
-              </figure>
+                {region.name}
+              </Link>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* REGION LINKS */}
-      <section
-        style={{
-          ...container,
-          paddingTop: 75,
-          paddingBottom: 75,
-        }}
-      >
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: 30,
-          }}
-        >
-          <h2
+          <div
             style={{
-              fontSize: 29,
-              margin: "0 0 13px",
+              textAlign: "center",
+              marginTop: 30,
             }}
           >
-            전국 지역별 후드 교체
-          </h2>
-
-          <p
-            style={{
-              color: "#666",
-              fontSize: 14,
-              lineHeight: 1.9,
-            }}
-          >
-            지역을 선택하면 시·군·구별
-            후드 교체 안내 페이지를
-            확인할 수 있습니다.
-          </p>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 160px), 1fr))",
-            gap: 10,
-          }}
-        >
-          {regions.map((region) => (
             <Link
-              key={region.slug}
-              href={`/area/${region.slug}`}
+              href="/area"
               style={{
-                display: "block",
-                background: "#fff",
-                border: "1px solid #e5e1d9",
-                borderRadius: 9,
-                padding: "17px 12px",
-                textAlign: "center",
-                color: "#333",
-                textDecoration: "none",
-                fontWeight: 800,
-                fontSize: 14,
+                color: "#96713e",
+                fontWeight: 900,
+                fontSize: 15,
               }}
             >
-              {region.name}
+              전국 지역 전체 보기 →
             </Link>
-          ))}
-        </div>
-
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: 30,
-          }}
-        >
-          <Link
-            href="/area"
-            style={{
-              color: "#96713e",
-              fontWeight: 900,
-              fontSize: 15,
-            }}
-          >
-            전국 지역 전체 보기 →
-          </Link>
+          </div>
         </div>
       </section>
 
