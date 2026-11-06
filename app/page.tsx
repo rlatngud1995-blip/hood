@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,6 +29,24 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
+const heroSlides = [
+  {
+    image:
+      "/12B08037-6AD2-4EF2-AB3F-2F9FAA2EE6A2.png",
+    alt: "주방후드 교체 시공 전후",
+  },
+  {
+    image:
+      "/310B47AA-B344-4A17-9160-AC277DBF595E.png",
+    alt: "아일랜드후드 교체 시공 전후",
+  },
+  {
+    image:
+      "/10D74E67-C29E-41AD-85D7-64D8092D6C4D.png",
+    alt: "침니후드 교체 시공 전후",
+  },
+];
 
 const categories = [
   {
@@ -170,6 +187,88 @@ export default function HomePage() {
         }}
       />
 
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes hoodSlide1 {
+              0%, 29% {
+                opacity: 1;
+                transform: scale(1);
+              }
+
+              34%, 95% {
+                opacity: 0;
+                transform: scale(1.05);
+              }
+
+              100% {
+                opacity: 1;
+                transform: scale(1);
+              }
+            }
+
+            @keyframes hoodSlide2 {
+              0%, 29% {
+                opacity: 0;
+                transform: scale(1.05);
+              }
+
+              34%, 62% {
+                opacity: 1;
+                transform: scale(1);
+              }
+
+              67%, 100% {
+                opacity: 0;
+                transform: scale(1.05);
+              }
+            }
+
+            @keyframes hoodSlide3 {
+              0%, 62% {
+                opacity: 0;
+                transform: scale(1.05);
+              }
+
+              67%, 95% {
+                opacity: 1;
+                transform: scale(1);
+              }
+
+              100% {
+                opacity: 0;
+                transform: scale(1.05);
+              }
+            }
+
+            .hood-slide-1 {
+              animation: hoodSlide1 12s infinite ease-in-out;
+            }
+
+            .hood-slide-2 {
+              animation: hoodSlide2 12s infinite ease-in-out;
+            }
+
+            .hood-slide-3 {
+              animation: hoodSlide3 12s infinite ease-in-out;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+              .hood-slide-1 {
+                animation: none;
+                opacity: 1 !important;
+              }
+
+              .hood-slide-2,
+              .hood-slide-3 {
+                animation: none;
+                opacity: 0 !important;
+              }
+            }
+          `,
+        }}
+      />
+
       {/* HEADER */}
       <header
         style={{
@@ -218,27 +317,72 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO */}
+      {/* HERO - AUTO SLIDER */}
       <section
         style={{
+          position: "relative",
+          overflow: "hidden",
           background: "#171717",
           color: "#fff",
           textAlign: "center",
+          minHeight: 610,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           padding: "80px 20px",
         }}
       >
+        {/* SLIDE IMAGES */}
+        {heroSlides.map((slide, index) => (
+          <div
+            key={slide.image}
+            className={`hood-slide-${index + 1}`}
+            style={{
+              position: "absolute",
+              inset: 0,
+              opacity: index === 0 ? 1 : 0,
+            }}
+          >
+            <Image
+              src={slide.image}
+              alt={slide.alt}
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+            />
+          </div>
+        ))}
+
+        {/* DARK OVERLAY */}
         <div
           style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 2,
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.82))",
+          }}
+        />
+
+        {/* HERO TEXT */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
             maxWidth: 850,
             margin: "0 auto",
           }}
         >
           <p
             style={{
-              color: "#d5b47b",
+              color: "#e0bb78",
               fontSize: 12,
               fontWeight: 900,
-              letterSpacing: "2px",
+              letterSpacing: "3px",
               margin: "0 0 18px",
             }}
           >
@@ -247,11 +391,13 @@ export default function HomePage() {
 
           <h1
             style={{
-              fontSize: "clamp(31px, 5vw, 49px)",
-              lineHeight: 1.35,
+              fontSize: "clamp(34px, 6vw, 54px)",
+              lineHeight: 1.3,
               fontWeight: 900,
               letterSpacing: "-1.5px",
               margin: "0 0 22px",
+              textShadow:
+                "0 3px 15px rgba(0,0,0,0.45)",
             }}
           >
             전국 주방후드 교체
@@ -261,10 +407,12 @@ export default function HomePage() {
 
           <p
             style={{
-              color: "#d2d2d2",
+              color: "#ededed",
               fontSize: 16,
               lineHeight: 2,
               margin: "0 0 30px",
+              textShadow:
+                "0 2px 10px rgba(0,0,0,0.6)",
             }}
           >
             렌지후드 · 후황 · 주방후드
@@ -276,20 +424,61 @@ export default function HomePage() {
             href={SITE.phoneHref}
             style={{
               display: "inline-block",
-              padding: "16px 28px",
-              background: "#a78047",
+              padding: "17px 30px",
+              background: "#b58a48",
               color: "#fff",
-              borderRadius: 9,
+              borderRadius: 10,
               textDecoration: "none",
               fontWeight: 900,
+              fontSize: 16,
+              boxShadow:
+                "0 8px 25px rgba(0,0,0,0.25)",
             }}
           >
             전화상담 {SITE.phone}
           </a>
+
+          {/* SLIDER DOTS */}
+          <div
+            aria-hidden="true"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 8,
+              marginTop: 28,
+            }}
+          >
+            <span
+              style={{
+                width: 25,
+                height: 4,
+                borderRadius: 10,
+                background: "#b58a48",
+              }}
+            />
+
+            <span
+              style={{
+                width: 8,
+                height: 4,
+                borderRadius: 10,
+                background: "rgba(255,255,255,0.55)",
+              }}
+            />
+
+            <span
+              style={{
+                width: 8,
+                height: 4,
+                borderRadius: 10,
+                background: "rgba(255,255,255,0.55)",
+              }}
+            />
+          </div>
         </div>
       </section>
 
-      {/* THREE SERVICE CATEGORIES */}
+      {/* SERVICE CATEGORIES */}
       <section
         style={{
           ...container,
@@ -451,7 +640,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* NATIONWIDE REGIONS */}
+      {/* REGIONS */}
       <section
         style={{
           background: "#f0ece4",
@@ -661,8 +850,10 @@ export default function HomePage() {
         <strong style={{ color: "#fff" }}>
           후드의정석
         </strong>
+
         <div>전국 주방후드 교체 상담</div>
         <div>{SITE.phone}</div>
+
         <div>
           © {new Date().getFullYear()} 후드의정석
         </div>
