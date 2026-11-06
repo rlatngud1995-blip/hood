@@ -5,43 +5,91 @@ const COMPANY = "후드의정석";
 
 const SERVICES = [
   {
+    number: "01",
     title: "주방후드 교체",
     description:
-      "노후 주방후드 철거부터 새 제품 설치까지 진행합니다.",
-    slug: "kitchen-hood",
+      "가정용 주방후드부터 렌지후드, 레인지후드, 슬림후드, 통후드, 빌트인후드, 허리케인후드까지 기존 제품의 규격과 배기 구조를 확인하여 교체·설치를 안내합니다.",
+    keywords: [
+      "주방후드교체",
+      "렌지후드교체",
+      "레인지후드교체",
+      "가정용후드교체",
+      "슬림후드교체",
+      "통후드교체",
+      "빌트인후드교체",
+      "허리케인후드교체",
+      "후황교체",
+    ],
   },
   {
-    title: "가정용후드 교체",
+    number: "02",
+    title: "아일랜드 후드교체",
     description:
-      "아파트, 빌라, 단독주택의 주방후드 교체 시공.",
-    slug: "home-hood",
+      "아일랜드 식탁과 조리대 상부에 설치된 천장형후드, 독립형후드, 아일랜드 렌지후드의 철거 및 교체를 안내합니다.",
+    keywords: [
+      "아일랜드후드교체",
+      "아일랜드후드설치",
+      "천장형후드교체",
+      "천장후드설치",
+      "독립형후드교체",
+      "아일랜드렌지후드",
+    ],
   },
   {
-    title: "아일랜드후드 교체",
+    number: "03",
+    title: "침니 후드교체",
     description:
-      "천장형 아일랜드후드 철거 및 교체 설치.",
-    slug: "island-hood",
-  },
-  {
-    title: "침니후드 교체",
-    description:
-      "벽부형 침니후드 교체 및 설치 상담.",
-    slug: "chimney-hood",
-  },
-  {
-    title: "허리케인후드 교체",
-    description:
-      "허리케인형 후드 교체와 설치 환경 확인.",
-    slug: "hurricane-hood",
+      "벽면에 설치된 침니후드, 굴뚝형후드, 벽부형후드, 경사형후드, 데코후드의 규격과 설치 환경을 확인하여 교체를 안내합니다.",
+    keywords: [
+      "침니후드교체",
+      "침니후드설치",
+      "벽부형후드교체",
+      "굴뚝형후드교체",
+      "경사형후드교체",
+      "데코후드교체",
+    ],
   },
 ];
 
 const PROCESS = [
-  "현장 사진 및 설치 환경 확인",
-  "기존 후드 규격과 배기 방식 확인",
-  "제품 및 시공 방법 안내",
-  "기존 후드 철거 및 새 후드 설치",
-  "작동 및 배기 상태 점검",
+  "기존 주방후드 사진 및 설치 지역 확인",
+  "후드 크기와 배기구 연결 구조 확인",
+  "교체 제품 및 시공 방법 상담",
+  "기존 후드 철거와 새 후드 설치",
+  "작동 및 배기 상태 확인",
+];
+
+const FAQ = [
+  {
+    question: "주방후드는 어떤 종류를 교체할 수 있나요?",
+    answer:
+      "일반 주방후드, 렌지후드, 슬림후드, 통후드, 빌트인후드, 허리케인후드 등 다양한 가정용 후드의 교체를 상담합니다. 제품과 현장 조건에 따라 시공 가능 여부가 달라집니다.",
+  },
+  {
+    question: "아일랜드 후드도 교체할 수 있나요?",
+    answer:
+      "천장형 아일랜드후드와 독립형후드는 천장 고정 구조, 배기구 위치, 제품 크기를 확인한 후 교체 가능 여부를 안내합니다.",
+  },
+  {
+    question: "침니후드를 다른 제품으로 교체할 수 있나요?",
+    answer:
+      "벽부형 침니후드, 굴뚝형후드, 경사형후드 등은 설치 공간과 배기 연결 방식이 적합하면 다른 제품으로 교체할 수 있습니다.",
+  },
+  {
+    question: "후드가 오래되고 소음이 심해도 교체 가능한가요?",
+    answer:
+      "노후 후드, 소음이 심한 후드, 흡입력이 약해진 후드 등은 제품 상태와 설치 환경을 확인한 후 교체를 상담할 수 있습니다.",
+  },
+  {
+    question: "전국 후드 교체 상담이 가능한가요?",
+    answer:
+      "전국 지역별 주방후드 교체 상담을 안내하며 실제 방문 시공 가능 여부는 지역과 일정에 따라 확인합니다.",
+  },
+  {
+    question: "후드 교체 견적에는 어떤 정보가 필요한가요?",
+    answer:
+      "현재 설치된 후드의 정면 사진, 제품 모델명, 후드 가로 크기, 설치 지역을 알려주시면 상담에 도움이 됩니다.",
+  },
 ];
 
 export default function Home() {
@@ -72,7 +120,7 @@ export default function Home() {
           </h1>
 
           <p className="heroDescription">
-            오래된 주방후드부터 아일랜드후드까지
+            주방후드 · 아일랜드후드 · 침니후드
             <br />
             전국 주방후드 교체·설치 상담
           </p>
@@ -101,9 +149,11 @@ export default function Home() {
         <h2>주방후드 교체의 기준</h2>
 
         <p>
-          후드의정석은 기존 후드의 크기, 설치 공간,
-          배기 방식 등을 확인하고 현장 조건에 맞는
-          교체 및 설치 방법을 안내합니다.
+          후드의정석은 주방후드 교체 및 설치를
+          안내하는 전문 서비스입니다.
+          기존 후드의 크기, 설치 공간,
+          배기구 연결 방식과 현장 조건을 확인하여
+          적합한 교체 방법을 안내합니다.
         </p>
       </section>
 
@@ -118,25 +168,36 @@ export default function Home() {
         <h2>후드 교체·설치 서비스</h2>
 
         <p className="sectionDescription">
-          다양한 주방 환경에 맞는 후드 교체 시공
+          주방 환경에 맞는 3가지 주요 후드 교체 서비스
         </p>
 
         <div className="serviceGrid">
-          {SERVICES.map((service, index) => (
+          {SERVICES.map((service) => (
             <article
               className="serviceCard"
-              key={service.slug}
+              key={service.number}
             >
               <div className="serviceNumber">
-                {String(index + 1).padStart(2, "0")}
+                {service.number}
               </div>
 
               <h3>{service.title}</h3>
 
               <p>{service.description}</p>
 
+              <div className="keywordTags">
+                {service.keywords.map((keyword) => (
+                  <span
+                    className="keywordTag"
+                    key={keyword}
+                  >
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+
               <a href="#contact">
-                상담 안내 →
+                견적 상담 안내 →
               </a>
             </article>
           ))}
@@ -147,10 +208,14 @@ export default function Home() {
         <p>전국 주방후드 교체·설치</p>
 
         <h2>
-          주방 환경에 맞는
+          오래된 주방후드부터
           <br />
-          후드 시공을 안내합니다.
+          아일랜드·침니후드까지
         </h2>
+
+        <p>
+          설치 환경에 맞는 후드 교체를 안내합니다.
+        </p>
       </section>
 
       <section
@@ -184,52 +249,15 @@ export default function Home() {
 
         <h2>자주 묻는 질문</h2>
 
-        <div className="faqItem">
-          <h3>
-            Q. 기존 후드와 다른 브랜드로
-            교체할 수 있나요?
-          </h3>
-
-          <p>
-            설치 공간과 배기구 위치,
-            제품 규격이 적합한 경우 가능합니다.
-          </p>
-        </div>
-
-        <div className="faqItem">
-          <h3>
-            Q. 아일랜드후드도 교체 가능한가요?
-          </h3>
-
-          <p>
-            천장 고정 구조와 배기 연결 상태를
-            확인한 후 시공 가능 여부를 안내합니다.
-          </p>
-        </div>
-
-        <div className="faqItem">
-          <h3>
-            Q. 전국 어디서나 시공 가능한가요?
-          </h3>
-
-          <p>
-            전국 지역별 상담을 진행하며,
-            실제 방문 가능 여부는 지역과
-            일정에 따라 확인이 필요합니다.
-          </p>
-        </div>
-
-        <div className="faqItem">
-          <h3>
-            Q. 견적을 받으려면 무엇이 필요한가요?
-          </h3>
-
-          <p>
-            기존 후드의 정면 사진,
-            제품 모델명, 설치 공간의 가로 폭을
-            알려주시면 상담에 도움이 됩니다.
-          </p>
-        </div>
+        {FAQ.map((item) => (
+          <div
+            className="faqItem"
+            key={item.question}
+          >
+            <h3>Q. {item.question}</h3>
+            <p>{item.answer}</p>
+          </div>
+        ))}
       </section>
 
       <section
@@ -240,14 +268,14 @@ export default function Home() {
           CONTACT US
         </p>
 
-        <h2>후드 교체 상담</h2>
+        <h2>주방후드 교체 상담</h2>
 
         <p>
-          기존 후드 사진과 설치 지역을
-          준비해 주세요.
+          주방후드 · 아일랜드후드 · 침니후드
           <br />
-          대표 전화번호 등록 후
-          전화 상담이 연결됩니다.
+          기존 후드 사진과 설치 지역을 준비해 주세요.
+          <br />
+          대표 전화번호 등록 후 전화 상담이 연결됩니다.
         </p>
 
         <div className="contactPending">
