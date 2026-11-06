@@ -195,12 +195,10 @@ export default function HomePage() {
                 opacity: 1;
                 transform: scale(1);
               }
-
               34%, 95% {
                 opacity: 0;
                 transform: scale(1.05);
               }
-
               100% {
                 opacity: 1;
                 transform: scale(1);
@@ -212,12 +210,10 @@ export default function HomePage() {
                 opacity: 0;
                 transform: scale(1.05);
               }
-
               34%, 62% {
                 opacity: 1;
                 transform: scale(1);
               }
-
               67%, 100% {
                 opacity: 0;
                 transform: scale(1.05);
@@ -229,12 +225,10 @@ export default function HomePage() {
                 opacity: 0;
                 transform: scale(1.05);
               }
-
               67%, 95% {
                 opacity: 1;
                 transform: scale(1);
               }
-
               100% {
                 opacity: 0;
                 transform: scale(1.05);
@@ -317,7 +311,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO - AUTO SLIDER */}
+      {/* HERO */}
       <section
         style={{
           position: "relative",
@@ -332,7 +326,6 @@ export default function HomePage() {
           padding: "80px 20px",
         }}
       >
-        {/* SLIDE IMAGES */}
         {heroSlides.map((slide, index) => (
           <div
             key={slide.image}
@@ -357,7 +350,6 @@ export default function HomePage() {
           </div>
         ))}
 
-        {/* DARK OVERLAY */}
         <div
           style={{
             position: "absolute",
@@ -368,7 +360,6 @@ export default function HomePage() {
           }}
         />
 
-        {/* HERO TEXT */}
         <div
           style={{
             position: "relative",
@@ -437,43 +428,120 @@ export default function HomePage() {
           >
             전화상담 {SITE.phone}
           </a>
+        </div>
+      </section>
 
-          {/* SLIDER DOTS */}
+      {/* COUPON */}
+      <section
+        style={{
+          background: "#fff8ee",
+          padding: "55px 0",
+        }}
+      >
+        <div style={container}>
           <div
-            aria-hidden="true"
             style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 8,
-              marginTop: 28,
+              textAlign: "center",
+              marginBottom: 24,
             }}
           >
-            <span
+            <p
               style={{
-                width: 25,
-                height: 4,
-                borderRadius: 10,
-                background: "#b58a48",
+                color: "#a78047",
+                fontWeight: 900,
+                fontSize: 12,
+                letterSpacing: "2px",
+                margin: "0 0 10px",
               }}
-            />
+            >
+              SPECIAL COUPON
+            </p>
 
-            <span
+            <h2
               style={{
-                width: 8,
-                height: 4,
-                borderRadius: 10,
-                background: "rgba(255,255,255,0.55)",
+                fontSize: 28,
+                margin: "0 0 10px",
               }}
-            />
+            >
+              시공비 10,000원 할인
+            </h2>
 
-            <span
+            <p
               style={{
-                width: 8,
-                height: 4,
-                borderRadius: 10,
-                background: "rgba(255,255,255,0.55)",
+                color: "#666",
+                lineHeight: 1.8,
+                fontSize: 14,
+                margin: 0,
               }}
-            />
+            >
+              후드 교체 상담 시 쿠폰 사용을 알려주세요.
+            </p>
+          </div>
+
+          <div
+            style={{
+              maxWidth: 950,
+              margin: "0 auto",
+              background: "#fff",
+              borderRadius: 16,
+              overflow: "hidden",
+              boxShadow:
+                "0 10px 35px rgba(0,0,0,0.08)",
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                aspectRatio: "2 / 1",
+                background: "#f3eee6",
+              }}
+            >
+              <Image
+                src="/8BE994D5-1983-4D8D-8C74-999E637E17EA.png"
+                alt="후드의정석 주방후드 교체 시공비 1만원 할인 쿠폰"
+                fill
+                sizes="(max-width: 768px) 100vw, 950px"
+                style={{
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                padding: "22px 22px 25px",
+                textAlign: "center",
+              }}
+            >
+              <p
+                style={{
+                  color: "#666",
+                  fontSize: 13,
+                  lineHeight: 1.8,
+                  margin: "0 0 17px",
+                }}
+              >
+                후드 교체 시 사용 가능 ·
+                상담 시 쿠폰 사용 여부를 말씀해주세요.
+              </p>
+
+              <a
+                href={SITE.phoneHref}
+                style={{
+                  display: "inline-block",
+                  background: "#171717",
+                  color: "#fff",
+                  padding: "15px 24px",
+                  borderRadius: 9,
+                  textDecoration: "none",
+                  fontWeight: 900,
+                  fontSize: 14,
+                }}
+              >
+                쿠폰 사용하고 전화상담
+              </a>
+            </div>
           </div>
         </div>
       </section>
