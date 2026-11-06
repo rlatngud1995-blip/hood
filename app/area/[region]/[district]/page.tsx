@@ -27,6 +27,9 @@ export function generateStaticParams() {
   }));
 }
 
+const CASE_IMAGE =
+  "/ECAD3A3D-6C53-43BF-A443-01A321496AE2.png";
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -78,9 +81,7 @@ export async function generateMetadata({
       type: "website",
       images: [
         {
-          url: `${SITE.url}/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png`,
-          width: 1200,
-          height: 630,
+          url: `${SITE.url}${CASE_IMAGE}`,
           alt: `${location} 후드 교체 시공 사례`,
         },
       ],
@@ -251,10 +252,8 @@ export default async function DistrictPage({
       {
         "@type": "ImageObject",
         "@id": `${pageUrl}#primaryimage`,
-        url:
-          `${SITE.url}/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png`,
-        contentUrl:
-          `${SITE.url}/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png`,
+        url: `${SITE.url}${CASE_IMAGE}`,
+        contentUrl: `${SITE.url}${CASE_IMAGE}`,
         caption: `${location} 후드 교체 시공 사례`,
       },
       {
@@ -330,7 +329,6 @@ export default async function DistrictPage({
         }}
       />
 
-      {/* HEADER */}
       <header
         style={{
           background: "#fff",
@@ -377,7 +375,6 @@ export default async function DistrictPage({
         </div>
       </header>
 
-      {/* HERO */}
       <section
         style={{
           background: "#171717",
@@ -447,7 +444,6 @@ export default async function DistrictPage({
         </div>
       </section>
 
-      {/* CONTENT */}
       <section
         style={{
           ...container,
@@ -455,7 +451,6 @@ export default async function DistrictPage({
           paddingBottom: 65,
         }}
       >
-        {/* BREADCRUMB */}
         <nav
           aria-label="현재 위치"
           style={{
@@ -483,7 +478,6 @@ export default async function DistrictPage({
           {name}
         </nav>
 
-        {/* LOCAL INTRO */}
         <h2
           style={{
             fontSize: 27,
@@ -511,7 +505,6 @@ export default async function DistrictPage({
           교체 방법을 상담합니다.
         </p>
 
-        {/* LOCAL CASE PHOTO */}
         <article
           style={{
             background: "#fff",
@@ -530,7 +523,7 @@ export default async function DistrictPage({
             }}
           >
             <Image
-              src="/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png"
+              src={CASE_IMAGE}
               alt={`${location} 주방후드 교체 시공 사례`}
               fill
               priority
@@ -577,7 +570,7 @@ export default async function DistrictPage({
             >
               기존 주방후드를 철거하고
               설치 공간과 후드 규격을 확인한 뒤
-              새로운 후드로 교체한 사례입니다.
+              새로운 후드로 교체한 시공 사례입니다.
               실제 교체 시에는 기존 제품의 크기,
               상부장 구조, 전원과 배기덕트 연결 상태를
               함께 확인해야 합니다.
@@ -585,7 +578,6 @@ export default async function DistrictPage({
           </div>
         </article>
 
-        {/* HOOD TYPES */}
         <h2
           style={{
             fontSize: 25,
@@ -634,7 +626,6 @@ export default async function DistrictPage({
           ))}
         </div>
 
-        {/* CHECK ITEMS */}
         <h2
           style={{
             fontSize: 25,
@@ -694,7 +685,6 @@ export default async function DistrictPage({
           ))}
         </div>
 
-        {/* PROCESS */}
         <h2
           style={{
             fontSize: 25,
@@ -743,7 +733,6 @@ export default async function DistrictPage({
           ))}
         </div>
 
-        {/* FAQ */}
         <h2
           style={{
             fontSize: 25,
@@ -795,7 +784,6 @@ export default async function DistrictPage({
           ))}
         </div>
 
-        {/* NEARBY DISTRICTS */}
         <h2
           style={{
             fontSize: 24,
@@ -847,7 +835,6 @@ export default async function DistrictPage({
         </div>
       </section>
 
-      {/* CONTACT */}
       <section
         style={{
           background: "#f0ece4",
@@ -892,7 +879,6 @@ export default async function DistrictPage({
         </a>
       </section>
 
-      {/* FOOTER */}
       <footer
         style={{
           background: "#171717",
@@ -915,7 +901,6 @@ export default async function DistrictPage({
         </div>
       </footer>
 
-      {/* FIXED PHONE */}
       <a
         href={SITE.phoneHref}
         aria-label={`${name} 후드 교체 전화상담`}
