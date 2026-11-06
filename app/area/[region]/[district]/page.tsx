@@ -1,5 +1,5 @@
-
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -38,28 +38,29 @@ export async function generateMetadata({
   if (!regionData || !districtData) {
     return {
       title: "페이지를 찾을 수 없습니다",
-      robots: { index: false, follow: false },
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
-  const location =
-    `${regionData.name} ${districtData.name}`;
+  const location = `${regionData.name} ${districtData.name}`;
+  const url = `${SITE.url}/area/${region}/${district}`;
 
   const title =
     `${location} 후드 교체 | 렌지후드·후황·주방후드`;
 
   const description =
     `${location} 후드 교체 상담. ` +
-    "주방후드, 렌지후드, 레인지후드, 후황, " +
-    "빌트인후드, 슬림후드, 통후드, 허리케인후드, " +
-    "아일랜드후드, 침니후드 교체 안내. " +
+    "렌지후드, 후황, 주방후드, 빌트인후드, 슬림후드, " +
+    "허리케인후드, 아일랜드후드, 침니후드 교체 안내. " +
     `문의 ${SITE.phone}.`;
 
-  const url =
-    `${SITE.url}/area/${region}/${district}`;
-
   return {
-    title: { absolute: title },
+    title: {
+      absolute: title,
+    },
     description,
     alternates: {
       canonical: url,
@@ -75,6 +76,14 @@ export async function generateMetadata({
       siteName: SITE.name,
       locale: "ko_KR",
       type: "website",
+      images: [
+        {
+          url: `${SITE.url}/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png`,
+          width: 1200,
+          height: 630,
+          alt: `${location} 후드 교체 시공 사례`,
+        },
+      ],
     },
   };
 }
@@ -83,79 +92,79 @@ const hoodTypes = [
   {
     name: "주방후드 · 렌지후드 교체",
     description:
-      "일반 가정집과 아파트 주방에 설치된 " +
-      "렌지후드, 레인지후드, 주방후드의 " +
-      "교체 방법을 안내합니다. " +
-      "기존 제품의 폭과 설치 구조를 확인합니다.",
+      "가정집, 아파트, 빌라의 일반 주방후드와 " +
+      "렌지후드 교체 상담입니다. " +
+      "기존 후드의 폭, 깊이, 고정 방식과 " +
+      "배기 연결 상태를 확인합니다.",
   },
   {
     name: "후황 · 슬림후드 교체",
     description:
       "후황으로 불리는 주방 환기후드와 " +
-      "슬림형 후드의 교체 상담입니다. " +
+      "슬림형 렌지후드의 교체를 안내합니다. " +
       "상부장 내부 공간과 배기구 위치를 확인합니다.",
   },
   {
     name: "빌트인후드 · 통후드 교체",
     description:
       "주방 가구 내부에 설치된 빌트인후드와 " +
-      "통후드의 규격, 고정 방식, 배기 연결을 " +
+      "통후드의 규격, 고정 방식 및 배기 연결 상태를 " +
       "확인하여 교체 가능 여부를 검토합니다.",
   },
   {
     name: "허리케인후드 교체",
     description:
-      "허리케인후드로 검색하는 제품도 " +
-      "실제 제품 형태와 모델명을 확인하여 " +
-      "호환 가능한 교체 방법을 검토합니다.",
+      "허리케인후드 역시 기존 제품의 모델명, " +
+      "설치 폭과 후드 형태를 확인한 뒤 " +
+      "교체 가능한 제품을 검토합니다.",
   },
   {
     name: "아일랜드후드 교체",
     description:
-      "천장에 고정된 아일랜드형 주방후드는 " +
-      "천장 고정 구조, 배기덕트 연결 상태와 " +
-      "작업 공간을 확인해야 합니다.",
+      "천장에 고정되는 아일랜드후드는 " +
+      "천장 고정 구조, 전원 위치와 " +
+      "배기덕트 상태를 확인해야 합니다.",
   },
   {
     name: "침니후드 · 데코후드 교체",
     description:
-      "벽면에 설치된 침니형, 굴뚝형, " +
-      "데코형 주방후드의 설치 높이와 " +
-      "벽면 고정 방식 등을 확인합니다.",
+      "벽면에 설치되는 침니형, 데코형, 굴뚝형 후드는 " +
+      "벽면 고정 상태와 설치 높이, " +
+      "배기 연결 방식을 확인합니다.",
   },
 ];
 
 const checkItems = [
   {
-    title: "기존 제품 규격",
+    title: "기존 후드 규격",
     text:
-      "후드의 가로 폭과 깊이, 모델명 및 " +
-      "제품 라벨을 확인합니다.",
+      "후드의 가로 폭과 깊이, 높이, " +
+      "제품 모델명 및 라벨을 확인합니다.",
   },
   {
-    title: "배기덕트 상태",
+    title: "배기덕트 연결",
     text:
-      "배기구 위치, 덕트 직경, " +
-      "연결 방식과 손상 여부를 확인합니다.",
+      "배기구 위치와 덕트 직경, " +
+      "덕트 연결 상태를 확인합니다.",
   },
   {
     title: "설치 공간",
     text:
-      "상부장, 벽면, 천장 등 " +
-      "후드가 고정되는 구조를 확인합니다.",
+      "상부장 내부 공간, 벽면 또는 " +
+      "천장 고정 구조를 확인합니다.",
   },
   {
     title: "추가 작업 여부",
     text:
-      "기존 후드 철거, 전원 연결, " +
-      "배기 연결 및 마감 작업을 검토합니다.",
+      "기존 제품 철거와 전원, 배기 연결, " +
+      "마감 작업 필요 여부를 확인합니다.",
   },
 ];
 
 const steps = [
   "기존 후드 사진 및 모델명 확인",
-  "설치 공간과 배기 구조 상담",
-  "교체 제품과 작업 범위 안내",
+  "설치 공간과 배기 구조 확인",
+  "교체 가능 제품과 작업 범위 상담",
   "비용 및 작업 일정 협의",
 ];
 
@@ -163,37 +172,28 @@ const faqs = [
   {
     question: "오래된 주방후드도 교체할 수 있나요?",
     answer:
-      "기존 제품의 크기와 설치 공간이 적합하면 " +
+      "기존 제품의 규격과 설치 공간이 적합하면 " +
       "교체를 검토할 수 있습니다. " +
-      "제품 모델명과 설치 사진을 확인해야 합니다.",
+      "기존 제품의 사진과 모델명을 확인하면 " +
+      "상담이 더욱 정확해집니다.",
   },
   {
-    question: "기존 후드와 다른 브랜드로 교체할 수 있나요?",
+    question: "다른 브랜드 후드로 교체할 수 있나요?",
     answer:
-      "제품 폭, 고정 방식, 배기 연결 규격이 " +
-      "적합하다면 다른 브랜드 제품으로 " +
-      "교체하는 방법도 검토할 수 있습니다.",
+      "제품 폭과 고정 방식, 배기 연결 규격이 적합하다면 " +
+      "다른 브랜드 제품으로 교체하는 방법도 검토할 수 있습니다.",
   },
   {
-    question: "후드 교체 비용은 어떻게 결정되나요?",
+    question: "후드 교체 비용은 어떻게 정해지나요?",
     answer:
       "제품 종류, 기존 후드 철거 난이도, " +
-      "배기덕트 연결과 추가 마감 작업에 " +
-      "따라 비용이 달라질 수 있습니다.",
+      "배기덕트 연결 및 추가 마감 작업 여부에 따라 달라집니다.",
   },
   {
-    question: "후황과 렌지후드도 교체 상담이 가능한가요?",
+    question: "후황이나 렌지후드도 교체 가능한가요?",
     answer:
-      "후황, 렌지후드, 레인지후드 등으로 " +
-      "불리는 주방 환기후드도 " +
-      "제품 형태와 설치 조건을 확인해 상담합니다.",
-  },
-  {
-    question: "아일랜드후드와 침니후드도 교체할 수 있나요?",
-    answer:
-      "두 제품 모두 교체 상담 대상입니다. " +
-      "천장 또는 벽면 고정 구조와 " +
-      "배기 연결 상태를 먼저 확인해야 합니다.",
+      "네. 후황, 렌지후드, 레인지후드 등으로 불리는 " +
+      "주방 환기후드도 제품 형태와 설치 구조를 확인해 상담합니다.",
   },
 ];
 
@@ -224,25 +224,7 @@ export default async function DistrictPage({
 
   const name = districtData.name;
   const location = `${regionData.name} ${name}`;
-
-  const pageUrl =
-    `${SITE.url}/area/${region}/${district}`;
-
-  const breadcrumbs = [
-    { name: "홈", url: SITE.url },
-    {
-      name: "전국 지역",
-      url: `${SITE.url}/area`,
-    },
-    {
-      name: regionData.name,
-      url: `${SITE.url}/area/${region}`,
-    },
-    {
-      name,
-      url: pageUrl,
-    },
-  ];
+  const pageUrl = `${SITE.url}/area/${region}/${district}`;
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -254,14 +236,26 @@ export default async function DistrictPage({
         url: pageUrl,
         inLanguage: "ko-KR",
         description:
-          `${location} 주방후드, 렌지후드, ` +
-          "후황, 아일랜드후드, 침니후드 교체 안내",
+          `${location} 주방후드, 렌지후드, 후황, ` +
+          "아일랜드후드, 침니후드 교체 안내",
+        primaryImageOfPage: {
+          "@id": `${pageUrl}#primaryimage`,
+        },
         breadcrumb: {
           "@id": `${pageUrl}#breadcrumb`,
         },
         mainEntity: {
           "@id": `${pageUrl}#service`,
         },
+      },
+      {
+        "@type": "ImageObject",
+        "@id": `${pageUrl}#primaryimage`,
+        url:
+          `${SITE.url}/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png`,
+        contentUrl:
+          `${SITE.url}/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png`,
+        caption: `${location} 후드 교체 시공 사례`,
       },
       {
         "@type": "Service",
@@ -286,14 +280,32 @@ export default async function DistrictPage({
       {
         "@type": "BreadcrumbList",
         "@id": `${pageUrl}#breadcrumb`,
-        itemListElement: breadcrumbs.map(
-          (item, index) => ({
+        itemListElement: [
+          {
             "@type": "ListItem",
-            position: index + 1,
-            name: item.name,
-            item: item.url,
-          })
-        ),
+            position: 1,
+            name: "홈",
+            item: SITE.url,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "전국 지역",
+            item: `${SITE.url}/area`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: regionData.name,
+            item: `${SITE.url}/area/${region}`,
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name,
+            item: pageUrl,
+          },
+        ],
       },
     ],
   };
@@ -311,9 +323,10 @@ export default async function DistrictPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            structuredData
-          ).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(structuredData).replace(
+            /</g,
+            "\\u003c"
+          ),
         }}
       />
 
@@ -395,7 +408,6 @@ export default async function DistrictPage({
             style={{
               fontSize: "clamp(30px, 5vw, 46px)",
               fontWeight: 900,
-              letterSpacing: "-1.5px",
               lineHeight: 1.35,
               margin: "0 0 20px",
             }}
@@ -443,6 +455,7 @@ export default async function DistrictPage({
           paddingBottom: 65,
         }}
       >
+        {/* BREADCRUMB */}
         <nav
           aria-label="현재 위치"
           style={{
@@ -456,10 +469,7 @@ export default async function DistrictPage({
             홈
           </Link>
           {" / "}
-          <Link
-            href="/area"
-            style={{ color: "inherit" }}
-          >
+          <Link href="/area" style={{ color: "inherit" }}>
             전국 지역
           </Link>
           {" / "}
@@ -473,6 +483,7 @@ export default async function DistrictPage({
           {name}
         </nav>
 
+        {/* LOCAL INTRO */}
         <h2
           style={{
             fontSize: 27,
@@ -488,22 +499,93 @@ export default async function DistrictPage({
             color: "#555",
             fontSize: 15,
             lineHeight: 2,
-            margin: "0 0 30px",
+            margin: "0 0 35px",
           }}
         >
-          {location}에서 주방후드 교체를
-          알아보고 있다면 기존 후드의 종류와
-          설치 규격을 먼저 확인하는 것이 좋습니다.
-          주방후드는 조리 시 발생하는 냄새와
-          수증기 등을 배출하는 설비로,
-          제품 형태와 배기 연결 구조에 따라
-          교체 방법이 달라집니다.
-          후드의정석은 기존 제품의 모델명,
-          설치 폭, 배기덕트 및 고정 구조를
-          확인하는 교체 상담을 안내합니다.
+          {location}에서 주방후드 교체를 알아보고 있다면
+          기존 후드의 종류와 설치 규격을 먼저 확인하는 것이 좋습니다.
+          주방후드는 제품 형태와 배기 연결 방식에 따라
+          교체 방법이 달라질 수 있습니다.
+          후드의정석은 기존 제품의 모델명, 설치 폭,
+          배기덕트와 고정 구조를 확인하여
+          교체 방법을 상담합니다.
         </p>
 
-        {/* TYPES */}
+        {/* LOCAL CASE PHOTO */}
+        <article
+          style={{
+            background: "#fff",
+            border: "1px solid #e7e3dc",
+            borderRadius: 14,
+            overflow: "hidden",
+            marginBottom: 55,
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              aspectRatio: "4 / 3",
+              background: "#ececec",
+            }}
+          >
+            <Image
+              src="/ECAD3A3D-6C53-43BE-A443-01A321496AE2.png"
+              alt={`${location} 주방후드 교체 시공 사례`}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 1000px"
+              style={{
+                objectFit: "contain",
+              }}
+            />
+          </div>
+
+          <div
+            style={{
+              padding: "25px 24px 27px",
+            }}
+          >
+            <p
+              style={{
+                color: "#a78047",
+                fontWeight: 900,
+                fontSize: 12,
+                letterSpacing: "1px",
+                margin: "0 0 9px",
+              }}
+            >
+              HOOD REPLACEMENT
+            </p>
+
+            <h2
+              style={{
+                fontSize: 23,
+                margin: "0 0 14px",
+              }}
+            >
+              {name} 주방후드 교체 시공 사례
+            </h2>
+
+            <p
+              style={{
+                color: "#5f5f5f",
+                lineHeight: 1.95,
+                fontSize: 14,
+                margin: 0,
+              }}
+            >
+              기존 주방후드를 철거하고
+              설치 공간과 후드 규격을 확인한 뒤
+              새로운 후드로 교체한 사례입니다.
+              실제 교체 시에는 기존 제품의 크기,
+              상부장 구조, 전원과 배기덕트 연결 상태를
+              함께 확인해야 합니다.
+            </p>
+          </div>
+        </article>
+
+        {/* HOOD TYPES */}
         <h2
           style={{
             fontSize: 25,
@@ -552,7 +634,7 @@ export default async function DistrictPage({
           ))}
         </div>
 
-        {/* CHECKS */}
+        {/* CHECK ITEMS */}
         <h2
           style={{
             fontSize: 25,
@@ -720,7 +802,7 @@ export default async function DistrictPage({
             margin: "0 0 20px",
           }}
         >
-          {regionData.name} 다른 지역
+          {regionData.name} 다른 지역 후드 교체
         </h2>
 
         <div
@@ -815,7 +897,7 @@ export default async function DistrictPage({
         style={{
           background: "#171717",
           color: "#bcbcbc",
-          padding: "30px 20px 100px",
+          padding: "30px 20px 110px",
           textAlign: "center",
           fontSize: 13,
           lineHeight: 1.9,
@@ -824,8 +906,10 @@ export default async function DistrictPage({
         <strong style={{ color: "#fff" }}>
           후드의정석
         </strong>
+
         <div>전국 주방후드 교체 상담</div>
         <div>{SITE.phone}</div>
+
         <div>
           © {new Date().getFullYear()} 후드의정석
         </div>
