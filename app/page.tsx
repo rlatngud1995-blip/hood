@@ -7,22 +7,26 @@ import { SITE } from "../lib/services";
 
 export const metadata: Metadata = {
   title: {
-    absolute:
-      "후드의정석 | 전국 주방후드·렌지후드·후황 교체",
+    absolute: "후드의정석 | 전국 주방후드·렌지후드 교체",
   },
+
+  // 네이버 페이지 설명 80자 이내
   description:
-    "전국 주방후드 교체 상담 후드의정석. " +
-    "렌지후드, 후황, 빌트인후드, 슬림후드, " +
-    "허리케인후드, 아일랜드후드, 침니후드 교체. " +
-    "지역별 후드 교체 안내 및 전화상담.",
+    "전국 주방후드·렌지후드·후황·아일랜드후드·침니후드 교체 상담 전문 후드의정석.",
+
   alternates: {
     canonical: SITE.url,
   },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
   openGraph: {
     title: "후드의정석 | 전국 주방후드 교체",
     description:
-      "주방후드, 렌지후드, 후황, " +
-      "아일랜드후드, 침니후드 교체 상담",
+      "전국 주방후드·렌지후드·후황·아일랜드후드·침니후드 교체 상담.",
     url: SITE.url,
     siteName: SITE.name,
     locale: "ko_KR",
@@ -57,9 +61,7 @@ const categories = [
     alt: "가정집 주방후드 교체 전후 비교",
     href: "/services/kitchen-hood",
     description:
-      "가정집, 아파트, 빌라의 주방후드와 " +
-      "렌지후드, 후황, 슬림후드, " +
-      "빌트인후드 교체 상담.",
+      "가정집, 아파트, 빌라의 주방후드와 렌지후드, 후황, 슬림후드, 빌트인후드 교체 상담.",
     keywords: [
       "렌지후드 교체",
       "후황 교체",
@@ -76,9 +78,7 @@ const categories = [
     alt: "아일랜드후드 교체 전후 비교",
     href: "/services/island-hood",
     description:
-      "천장에 설치된 아일랜드형 주방후드의 " +
-      "교체 상담. 천장 고정 구조와 " +
-      "배기 연결 상태를 확인합니다.",
+      "천장에 설치된 아일랜드형 주방후드 교체 상담. 천장 고정 구조와 배기 연결 상태를 확인합니다.",
     keywords: [
       "아일랜드 렌지후드",
       "천장형 후드",
@@ -93,9 +93,7 @@ const categories = [
     alt: "침니형 주방후드 교체 전후 비교",
     href: "/services/chimney-hood",
     description:
-      "벽면에 설치된 침니형, 데코형, " +
-      "굴뚝형 주방후드 교체 상담. " +
-      "제품 규격과 배기덕트 연결을 확인합니다.",
+      "벽면에 설치된 침니형, 데코형, 굴뚝형 주방후드 교체 상담. 제품 규격과 배기덕트를 확인합니다.",
     keywords: [
       "침니 렌지후드",
       "데코후드 교체",
@@ -108,31 +106,22 @@ const faqs = [
   {
     question: "오래된 주방후드도 교체할 수 있나요?",
     answer:
-      "기존 후드의 설치 규격과 공간이 적합하면 " +
-      "교체를 검토할 수 있습니다. " +
-      "제품 모델명과 설치 사진을 확인해야 합니다.",
+      "기존 후드의 설치 규격과 공간이 적합하면 교체를 검토할 수 있습니다. 제품 모델명과 설치 사진을 확인하면 상담에 도움이 됩니다.",
   },
   {
     question: "후황과 렌지후드는 같은 건가요?",
     answer:
-      "후황, 렌지후드, 레인지후드는 " +
-      "주방 환기후드를 가리키는 표현으로 " +
-      "사용됩니다. 실제 제품 종류는 " +
-      "설치 형태에 따라 구분됩니다.",
+      "후황, 렌지후드, 레인지후드는 주방 환기후드를 가리키는 표현으로 사용됩니다. 실제 제품 종류는 설치 형태에 따라 구분됩니다.",
   },
   {
     question: "후드 교체 비용은 얼마인가요?",
     answer:
-      "제품 종류, 기존 후드 철거 난이도, " +
-      "배기덕트 연결 및 추가 마감 작업에 " +
-      "따라 비용이 달라집니다.",
+      "제품 종류, 기존 후드 철거 난이도, 배기덕트 연결 및 추가 마감 작업에 따라 비용이 달라집니다.",
   },
   {
     question: "아일랜드후드도 교체할 수 있나요?",
     answer:
-      "천장 고정 구조와 배기 연결 상태, " +
-      "교체 제품의 규격을 확인한 뒤 " +
-      "교체 가능 여부를 검토합니다.",
+      "천장 고정 구조와 배기 연결 상태, 교체 제품의 규격을 확인한 뒤 교체 가능 여부를 검토합니다.",
   },
 ];
 
@@ -195,10 +184,12 @@ export default function HomePage() {
                 opacity: 1;
                 transform: scale(1);
               }
+
               34%, 95% {
                 opacity: 0;
                 transform: scale(1.05);
               }
+
               100% {
                 opacity: 1;
                 transform: scale(1);
@@ -210,10 +201,12 @@ export default function HomePage() {
                 opacity: 0;
                 transform: scale(1.05);
               }
+
               34%, 62% {
                 opacity: 1;
                 transform: scale(1);
               }
+
               67%, 100% {
                 opacity: 0;
                 transform: scale(1.05);
@@ -225,10 +218,12 @@ export default function HomePage() {
                 opacity: 0;
                 transform: scale(1.05);
               }
+
               67%, 95% {
                 opacity: 1;
                 transform: scale(1);
               }
+
               100% {
                 opacity: 0;
                 transform: scale(1.05);
@@ -311,7 +306,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO */}
+      {/* HERO AUTO SLIDER */}
       <section
         style={{
           position: "relative",
@@ -522,8 +517,7 @@ export default function HomePage() {
                   margin: "0 0 17px",
                 }}
               >
-                후드 교체 시 사용 가능 ·
-                상담 시 쿠폰 사용 여부를 말씀해주세요.
+                후드 교체 시 사용 가능 · 상담 시 쿠폰 사용 여부를 말씀해주세요.
               </p>
 
               <a
@@ -546,7 +540,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SERVICE CATEGORIES */}
+      {/* SERVICES */}
       <section
         style={{
           ...container,
@@ -587,8 +581,7 @@ export default function HomePage() {
               fontSize: 14,
             }}
           >
-            주방 구조와 후드 종류에 맞는
-            교체 서비스를 확인하세요.
+            주방 구조와 후드 종류에 맞는 교체 서비스를 확인하세요.
           </p>
         </div>
 
@@ -738,8 +731,7 @@ export default function HomePage() {
                 lineHeight: 1.9,
               }}
             >
-              지역을 선택하면 시·군·구별
-              후드 교체 안내를 확인할 수 있습니다.
+              지역을 선택하면 시·군·구별 후드 교체 안내를 확인할 수 있습니다.
             </p>
           </div>
 
@@ -883,9 +875,7 @@ export default function HomePage() {
             margin: "0 0 25px",
           }}
         >
-          기존 후드 사진과 제품 모델명,
-          설치 지역을 알려주시면
-          상담에 도움이 됩니다.
+          기존 후드 사진과 제품 모델명, 설치 지역을 알려주시면 상담에 도움이 됩니다.
         </p>
 
         <a
