@@ -18,14 +18,6 @@ type PageProps = {
   }>;
 };
 
-type LocalProfile = {
-  shortIntro: string;
-  detailIntro: string;
-  housingText: string;
-  consultationText: string;
-  neighborhoods: string[];
-};
-
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -38,131 +30,162 @@ export function generateStaticParams() {
 const CASE_IMAGE =
   "/ECAD3A3D-6C53-43BF-A443-01A321496AE2.png";
 
-/*
-  실제 확인 가능한 지역 정보만 별도로 넣습니다.
+/* ===============================
+   지역별 문장 자동 변형
+================================ */
 
-  검색 노출을 위해 존재하지 않는 지역 특성,
-  시공 실적, 고객 수, 경력, 후기 등을
-  자동 생성하지 않습니다.
-*/
-const LOCAL_PROFILES: Record<string, LocalProfile> = {
-  "seoul/gangnam": {
-    shortIntro:
-      "강남구의 아파트·빌라·주택 주방에 설치된 렌지후드와 주방후드는 제품 규격뿐 아니라 상부장 구조, 배기덕트 위치와 기존 고정 방식을 함께 확인하는 것이 중요합니다.",
+function getVariant(slug: string, length: number) {
+  const value = slug
+    .split("")
+    .reduce((sum, char) => sum + char.charCodeAt(0), 0);
 
-    detailIntro:
-      "강남구에서 주방후드 교체를 알아볼 때는 기존 제품의 모델명과 가로 폭을 먼저 확인하는 것이 좋습니다. 같은 600mm급 후드라도 설치 방식과 상부장 내부 구조, 배기덕트 위치가 다를 수 있으며 아일랜드후드와 침니후드는 천장 또는 벽면 고정 상태까지 확인해야 합니다.",
+  return value % length;
+}
 
-    housingText:
-      "강남구에는 공동주택과 주거용 건물이 다양하게 분포해 있어 주방 형태 역시 서로 다릅니다. 후드 교체 전에는 건물 유형만으로 제품을 결정하기보다 현재 설치된 후드 사진, 모델명, 가로 폭과 배기 연결 상태를 기준으로 교체 가능 여부를 확인하는 것이 안전합니다.",
+const introVariants = [
+  (location: string) =>
+    `${location}에서 주방후드 교체를 알아보고 있다면 기존 제품의 모델명과 가로 폭, 설치 공간, 배기 연결 상태를 먼저 확인하는 것이 좋습니다. 후드 형태와 주방 구조에 따라 교체 방법이 달라질 수 있습니다.`,
 
-    consultationText:
-      "상담 시 강남구 내 설치 지역의 동명과 기존 후드 사진을 함께 알려주면 제품 형태와 예상 작업 범위를 확인하는 데 도움이 됩니다.",
+  (location: string) =>
+    `${location} 주방후드 교체는 단순히 기존 제품과 비슷한 후드를 선택하는 것보다 현재 설치 상태를 먼저 확인하는 것이 중요합니다. 기존 후드의 규격과 상부장 구조, 배기덕트 위치를 함께 확인해야 합니다.`,
 
-    neighborhoods: [
-      "신사동",
-      "논현1동",
-      "논현2동",
-      "압구정동",
-      "청담동",
-      "삼성1동",
-      "삼성2동",
-      "대치1동",
-      "대치2동",
-      "대치4동",
-      "역삼1동",
-      "역삼2동",
-      "도곡1동",
-      "도곡2동",
-      "개포1동",
-      "개포2동",
-      "개포3동",
-      "개포4동",
-      "일원본동",
-      "일원1동",
-      "수서동",
-      "세곡동",
-    ],
-  },
-};
+  (location: string) =>
+    `${location}에서 렌지후드나 후황 교체가 필요하다면 기존 제품의 폭과 설치 방식부터 확인하는 것이 좋습니다. 같은 크기의 후드라도 고정 방식과 배기 연결 구조가 서로 다를 수 있습니다.`,
+
+  (location: string) =>
+    `${location}의 주방후드 교체 상담은 기존 후드 사진과 모델명 확인부터 시작합니다. 슬림후드, 빌트인후드, 침니후드, 아일랜드후드 등 제품 형태에 따라 확인해야 할 설치 조건이 달라집니다.`,
+
+  (location: string) =>
+    `${location}에서 오래된 주방후드나 렌지후드를 교체할 때는 제품 규격뿐 아니라 주방가구 내부 공간과 배기덕트 연결 상태를 함께 확인하는 것이 중요합니다.`,
+];
+
+const detailVariants = [
+  (name: string) =>
+    `${name} 후드 교체 상담 시에는 후드 전체 모습과 상부장 또는 벽면이 함께 보이는 사진, 제품 모델명이 표시된 라벨 사진을 준비하면 교체 가능한 제품과 필요한 작업을 확인하는 데 도움이 됩니다.`,
+
+  (name: string) =>
+    `${name}에서 후드 교체를 준비한다면 현재 설치된 제품의 형태와 규격을 먼저 확인해 주세요. 제품 폭, 배기구 위치, 전원과 고정 구조에 따라 작업 범위가 달라질 수 있습니다.`,
+
+  (name: string) =>
+    `${name} 주방후드 교체는 현장 구조를 확인한 뒤 진행 방향을 정하는 것이 좋습니다. 기존 후드 철거 후 별도의 배기 연결이나 마감 작업이 필요한 경우도 있기 때문입니다.`,
+
+  (name: string) =>
+    `${name} 렌지후드 교체는 기존 제품의 브랜드만으로 판단하기보다 실제 설치 폭과 고정 구조를 기준으로 확인하는 것이 좋습니다. 다른 브랜드 제품도 규격이 맞으면 검토할 수 있습니다.`,
+
+  (name: string) =>
+    `${name} 후드 교체 전 기존 제품 사진과 모델명을 확인하면 상담이 훨씬 수월합니다. 특히 빌트인형과 아일랜드형은 설치 공간과 고정 구조 확인이 중요합니다.`,
+];
+
+const housingVariants = [
+  (name: string) =>
+    `${name}의 아파트·빌라·주택은 주방 구조에 따라 후드 설치 방식이 서로 다를 수 있습니다. 건물 유형만으로 제품을 결정하기보다 현재 설치된 제품과 배기 구조를 기준으로 확인하는 것이 좋습니다.`,
+
+  (name: string) =>
+    `${name}에서 아파트나 주택의 주방후드를 교체할 때는 상부장 크기와 기존 후드 규격을 함께 확인해야 합니다. 침니형과 아일랜드형은 벽면 또는 천장 고정 상태도 중요합니다.`,
+
+  (name: string) =>
+    `${name} 주거공간의 후드 교체는 기존 주방가구를 그대로 사용하는 경우가 많기 때문에 현재 설치 공간과 후드 크기의 호환 여부를 먼저 확인하는 것이 좋습니다.`,
+
+  (name: string) =>
+    `${name}의 아파트·빌라·단독주택에서 주방후드를 교체할 경우 기존 제품 종류와 배기덕트 상태에 따라 필요한 작업이 달라질 수 있습니다.`,
+
+  (name: string) =>
+    `${name} 주방후드 교체는 슬림형, 빌트인형, 통후드, 침니형 등 기존 제품 형태에 따라 작업 방식이 달라질 수 있어 설치 상태 확인이 먼저 필요합니다.`,
+];
+
+/* ===============================
+   후드 종류
+================================ */
 
 const hoodTypes = [
   {
     title: "주방후드 · 렌지후드 교체",
     description:
-      "아파트, 빌라, 단독주택 등에 설치된 일반 주방후드와 렌지후드 교체 상담입니다. 기존 제품의 가로 폭, 설치 공간, 고정 방식과 배기 연결 상태를 확인합니다.",
+      "아파트, 빌라, 단독주택 등의 일반 주방후드와 렌지후드 교체 상담입니다. 기존 제품의 가로 폭과 설치 공간, 배기 연결 상태를 확인합니다.",
   },
   {
     title: "후황 · 슬림후드 교체",
     description:
-      "후황으로 불리는 기존 주방 환기후드와 슬림형 후드의 교체를 안내합니다. 상부장 내부 공간과 기존 배기구 위치를 함께 확인해야 합니다.",
+      "후황으로 불리는 주방 환기후드와 슬림형 후드의 교체를 안내합니다. 상부장 내부 공간과 기존 배기구 위치를 확인합니다.",
   },
   {
     title: "빌트인후드 · 통후드 교체",
     description:
-      "주방가구 내부에 설치된 빌트인후드와 통후드는 기존 제품 규격, 가구 내부 공간과 배기 연결 상태를 확인하여 교체 방법을 검토합니다.",
+      "주방가구 내부에 설치된 빌트인후드와 통후드는 기존 제품 규격과 가구 내부 공간을 확인한 뒤 교체 가능 여부를 검토합니다.",
   },
   {
     title: "허리케인후드 교체",
     description:
-      "허리케인후드는 기존 제품의 모델명과 설치 폭, 고정 형태를 확인한 뒤 호환 가능한 제품과 필요한 작업 범위를 상담합니다.",
+      "허리케인후드는 기존 제품 모델명과 제품 폭, 설치 형태를 확인한 뒤 호환 가능한 제품과 필요한 작업 범위를 검토합니다.",
   },
   {
     title: "아일랜드후드 교체",
     description:
-      "천장에 고정된 아일랜드후드는 천장 고정 구조, 전원 위치, 배기덕트와 설치 높이 등을 함께 확인하는 것이 중요합니다.",
+      "천장에 고정된 아일랜드후드는 천장 고정 구조, 전원 위치, 배기덕트 연결과 설치 높이를 함께 확인하는 것이 중요합니다.",
   },
   {
     title: "침니후드 · 데코후드 교체",
     description:
-      "벽면에 설치되는 침니형·데코형 후드는 설치 높이, 벽면 고정 방식과 배기덕트 연결 상태를 확인한 뒤 교체 방법을 안내합니다.",
+      "벽면에 설치되는 침니형·데코형 후드는 설치 높이와 벽면 고정 방식, 배기덕트 연결 상태를 확인합니다.",
   },
 ];
 
+/* ===============================
+   주거유형
+================================ */
+
 const housingTypes = [
   {
-    title: "아파트 주방후드 교체",
+    title: "아파트 후드 교체",
     description:
-      "상부장 내부에 설치된 슬림형·빌트인형 후드부터 벽면형 후드까지 기존 후드의 폭과 배기 구조를 먼저 확인합니다.",
+      "상부장 내부 설치 공간과 기존 후드의 가로 폭, 배기덕트 연결 상태를 확인합니다.",
   },
   {
-    title: "빌라 주방후드 교체",
+    title: "빌라 후드 교체",
     description:
-      "주방가구 구조와 기존 후드 규격, 배기덕트의 위치를 확인하여 제품 호환 여부와 철거 범위를 검토합니다.",
+      "주방가구 구조와 기존 후드 규격을 확인하여 제품 호환 여부와 철거 범위를 검토합니다.",
   },
   {
-    title: "단독주택 주방후드 교체",
+    title: "단독주택 후드 교체",
     description:
-      "벽면 또는 천장 배기 구조와 전원 위치, 후드 고정 상태를 확인하여 설치 가능한 제품 형태를 검토합니다.",
+      "벽면 또는 천장 배기 구조와 전원 위치, 기존 후드의 고정 상태를 확인합니다.",
   },
 ];
+
+/* ===============================
+   체크사항
+================================ */
 
 const checks = [
   {
     number: "01",
     title: "기존 후드 모델명",
     description:
-      "후드 하단이나 필터 내부 라벨의 모델명을 확인하면 기존 규격과 교체 제품을 확인하는 데 도움이 됩니다.",
+      "제품 하단이나 필터 내부 라벨의 모델명을 확인하면 기존 규격을 파악하는 데 도움이 됩니다.",
   },
   {
     number: "02",
     title: "후드 가로 폭",
     description:
-      "기존 제품의 가로 폭과 주방가구 사이의 실제 설치 공간을 확인해야 제품 호환 여부를 판단하기 쉽습니다.",
+      "기존 후드의 가로 폭과 실제 설치 공간을 확인해야 교체 제품의 호환 여부를 판단하기 쉽습니다.",
   },
   {
     number: "03",
     title: "배기덕트 위치",
     description:
-      "배기구 위치와 덕트 직경, 연결 상태에 따라 교체 작업 방법과 추가 작업 여부가 달라질 수 있습니다.",
+      "배기구 위치와 덕트 연결 상태에 따라 교체 작업 방법과 추가 작업 여부가 달라질 수 있습니다.",
   },
   {
     number: "04",
-    title: "상부장·벽면·천장 구조",
+    title: "설치 구조 확인",
     description:
-      "슬림형과 빌트인형은 상부장을, 침니형은 벽면을, 아일랜드형은 천장 고정 상태까지 확인해야 합니다.",
+      "슬림형과 빌트인형은 상부장을, 침니형은 벽면을, 아일랜드형은 천장 고정 상태를 확인해야 합니다.",
   },
 ];
+
+/* ===============================
+   상담절차
+================================ */
 
 const process = [
   {
@@ -175,49 +198,25 @@ const process = [
     number: "02",
     title: "모델명·규격 확인",
     description:
-      "기존 모델명과 제품 폭을 확인해 교체 가능한 형태를 검토합니다.",
+      "기존 모델명과 제품 폭을 확인하여 교체 가능한 형태를 검토합니다.",
   },
   {
     number: "03",
     title: "설치 조건 확인",
     description:
-      "배기덕트, 상부장, 벽면 또는 천장 구조를 확인합니다.",
+      "배기덕트와 상부장, 벽면 또는 천장 구조를 확인합니다.",
   },
   {
     number: "04",
     title: "작업 범위 상담",
     description:
-      "제품과 현장 조건을 기준으로 작업 범위와 일정을 상담합니다.",
+      "제품과 설치 조건을 기준으로 필요한 작업 범위와 일정을 상담합니다.",
   },
 ];
 
-const faqs = [
-  {
-    question: "오래된 주방후드도 교체할 수 있나요?",
-    answer:
-      "기존 제품의 규격과 설치 구조를 확인하면 교체 가능 여부를 검토할 수 있습니다. 모델명과 설치 사진을 함께 확인하면 제품 호환 여부를 판단하는 데 도움이 됩니다.",
-  },
-  {
-    question: "렌지후드와 후황도 교체할 수 있나요?",
-    answer:
-      "네. 렌지후드, 레인지후드, 후황 등으로 불리는 주방 환기후드도 제품 형태와 설치 규격을 확인하여 교체 방법을 상담할 수 있습니다.",
-  },
-  {
-    question: "기존 후드와 다른 브랜드로 교체할 수 있나요?",
-    answer:
-      "제품 폭, 설치 공간, 고정 방식과 배기 연결 규격이 맞는다면 다른 브랜드 제품도 검토할 수 있습니다.",
-  },
-  {
-    question: "후드 교체 비용은 어떻게 결정되나요?",
-    answer:
-      "제품 종류, 기존 후드 철거 난이도, 설치 구조, 배기덕트 연결과 추가 마감 필요 여부 등에 따라 작업 범위가 달라질 수 있습니다.",
-  },
-  {
-    question: "상담할 때 어떤 사진을 보내면 좋나요?",
-    answer:
-      "후드 전체 모습, 상부장 또는 벽면이 함께 보이는 사진, 제품 모델명 라벨 사진을 준비하면 상담에 도움이 됩니다.",
-  },
-];
+/* ===============================
+   기본 스타일
+================================ */
 
 const container = {
   maxWidth: 1100,
@@ -232,12 +231,9 @@ const cardGrid = {
   gap: 15,
 };
 
-function getLocalProfile(
-  region: string,
-  district: string
-): LocalProfile | null {
-  return LOCAL_PROFILES[`${region}/${district}`] ?? null;
-}
+/* ===============================
+   Metadata
+================================ */
 
 export async function generateMetadata({
   params,
@@ -258,22 +254,13 @@ export async function generateMetadata({
   }
 
   const name = districtData.name;
-  const location = `${regionData.name} ${name}`;
 
   const canonical =
     `${SITE.url}/area/${region}/${district}`;
 
-  /*
-    제목을 지나치게 길게 만들지 않습니다.
-    H1과 title의 핵심 주제를 일치시킵니다.
-  */
   const title =
     `${name} 후드 교체 | 주방후드·렌지후드 교체`;
 
-  /*
-    네이버 진단에서 과도하게 긴 설명문이
-    다시 발생하지 않도록 짧게 유지합니다.
-  */
   const description =
     `${name} 주방후드·렌지후드·후황·아일랜드후드·침니후드 교체 상담. ${SITE.phone}`;
 
@@ -305,28 +292,23 @@ export async function generateMetadata({
       type: "website",
       locale: "ko_KR",
       siteName: SITE.name,
-
       title,
       description,
-
       url: canonical,
 
       images: [
         {
           url: `${SITE.url}${CASE_IMAGE}`,
-          alt: `주방후드 교체 참고 사례`,
+          alt: "주방후드 교체 참고 사례",
         },
       ],
     },
-
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [`${SITE.url}${CASE_IMAGE}`],
-    },
   };
 }
+
+/* ===============================
+   PAGE
+================================ */
 
 export default async function DistrictPage({
   params,
@@ -341,21 +323,77 @@ export default async function DistrictPage({
   }
 
   const name = districtData.name;
-  const location = `${regionData.name} ${name}`;
+
+  const location =
+    `${regionData.name} ${name}`;
 
   const pageUrl =
     `${SITE.url}/area/${region}/${district}`;
 
-  const localProfile =
-    getLocalProfile(region, district);
+  const variant =
+    getVariant(
+      `${region}-${district}`,
+      introVariants.length
+    );
+
+  const detailVariant =
+    getVariant(
+      `${district}-${region}`,
+      detailVariants.length
+    );
+
+  const housingVariant =
+    getVariant(
+      `${district}housing${region}`,
+      housingVariants.length
+    );
 
   const intro =
-    localProfile?.shortIntro ??
-    `${location}에서 주방후드 교체를 알아보고 있다면 기존 후드의 모델명과 제품 폭, 설치 공간, 배기 연결 상태를 먼저 확인하는 것이 좋습니다.`;
+    introVariants[variant](location);
 
   const detailIntro =
-    localProfile?.detailIntro ??
-    `후드 종류와 설치 구조에 따라 필요한 작업이 달라질 수 있으므로 기존 제품 사진과 모델명을 기준으로 교체 가능한 제품과 작업 범위를 확인하는 것이 좋습니다.`;
+    detailVariants[detailVariant](name);
+
+  const housingIntro =
+    housingVariants[housingVariant](name);
+
+  const faqs = [
+    {
+      question:
+        `${name}에서 오래된 주방후드도 교체할 수 있나요?`,
+
+      answer:
+        "기존 제품의 규격과 설치 구조를 확인하면 교체 가능 여부를 검토할 수 있습니다. 모델명과 설치 사진을 함께 확인하면 제품 호환 여부를 판단하는 데 도움이 됩니다.",
+    },
+    {
+      question:
+        `${name} 렌지후드와 후황도 교체 가능한가요?`,
+
+      answer:
+        "렌지후드, 레인지후드, 후황 등으로 불리는 주방 환기후드도 제품 형태와 설치 규격을 확인하여 교체 방법을 상담할 수 있습니다.",
+    },
+    {
+      question:
+        "기존 후드와 다른 브랜드 제품으로 교체할 수 있나요?",
+
+      answer:
+        "제품 폭, 설치 공간, 고정 방식과 배기 연결 규격이 맞는다면 다른 브랜드 제품도 검토할 수 있습니다.",
+    },
+    {
+      question:
+        `${name} 후드 교체 비용은 어떻게 결정되나요?`,
+
+      answer:
+        "제품 종류, 기존 후드 철거 난이도, 설치 구조, 배기덕트 연결과 추가 마감 필요 여부에 따라 작업 범위와 비용이 달라질 수 있습니다.",
+    },
+    {
+      question:
+        "상담할 때 어떤 사진을 준비하면 좋나요?",
+
+      answer:
+        "후드 전체 모습, 상부장 또는 벽면이 함께 보이는 사진, 제품 모델명이 적힌 라벨 사진을 준비하면 상담에 도움이 됩니다.",
+    },
+  ];
 
   const schema = {
     "@context": "https://schema.org",
@@ -363,6 +401,7 @@ export default async function DistrictPage({
     "@graph": [
       {
         "@type": "WebPage",
+
         "@id": `${pageUrl}#webpage`,
 
         url: pageUrl,
@@ -370,7 +409,7 @@ export default async function DistrictPage({
         name: `${name} 후드 교체`,
 
         description:
-          `${name} 주방후드, 렌지후드, 후황, 아일랜드후드, 침니후드 교체 안내`,
+          `${name} 주방후드, 렌지후드, 후황, 아일랜드후드 및 침니후드 교체 안내`,
 
         inLanguage: "ko-KR",
 
@@ -383,17 +422,19 @@ export default async function DistrictPage({
         },
 
         primaryImageOfPage: {
-          "@id": `${pageUrl}#primaryimage`,
+          "@id": `${pageUrl}#image`,
         },
       },
 
       {
         "@type": "ImageObject",
-        "@id": `${pageUrl}#primaryimage`,
+
+        "@id": `${pageUrl}#image`,
 
         url: `${SITE.url}${CASE_IMAGE}`,
 
-        contentUrl: `${SITE.url}${CASE_IMAGE}`,
+        contentUrl:
+          `${SITE.url}${CASE_IMAGE}`,
 
         caption:
           "후드의정석 주방후드 교체 참고 사례",
@@ -401,9 +442,11 @@ export default async function DistrictPage({
 
       {
         "@type": "Service",
+
         "@id": `${pageUrl}#service`,
 
-        name: `${name} 주방후드 교체 상담`,
+        name:
+          `${name} 주방후드 교체 상담`,
 
         serviceType:
           "주방후드 및 렌지후드 교체",
@@ -422,7 +465,9 @@ export default async function DistrictPage({
         },
 
         areaServed: {
-          "@type": "AdministrativeArea",
+          "@type":
+            "AdministrativeArea",
+
           name: location,
         },
 
@@ -430,32 +475,49 @@ export default async function DistrictPage({
       },
 
       {
-        "@type": "BreadcrumbList",
-        "@id": `${pageUrl}#breadcrumb`,
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${pageUrl}#breadcrumb`,
 
         itemListElement: [
           {
             "@type": "ListItem",
+
             position: 1,
+
             name: "홈",
+
             item: SITE.url,
           },
           {
             "@type": "ListItem",
+
             position: 2,
+
             name: "전국 지역",
+
             item: `${SITE.url}/area`,
           },
           {
             "@type": "ListItem",
+
             position: 3,
+
             name: regionData.name,
-            item: `${SITE.url}/area/${region}`,
+
+            item:
+              `${SITE.url}/area/${region}`,
           },
           {
             "@type": "ListItem",
+
             position: 4,
-            name: `${name} 후드 교체`,
+
+            name:
+              `${name} 후드 교체`,
+
             item: pageUrl,
           },
         ],
@@ -467,8 +529,11 @@ export default async function DistrictPage({
     <main
       style={{
         minHeight: "100vh",
+
         background: "#faf9f6",
+
         color: "#171717",
+
         fontFamily:
           "'Pretendard', 'Noto Sans KR', Arial, sans-serif",
       }}
@@ -476,20 +541,25 @@ export default async function DistrictPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(schema).replace(
-            /</g,
-            "\\u003c"
-          ),
+          __html:
+            JSON.stringify(schema).replace(
+              /</g,
+              "\\u003c"
+            ),
         }}
       />
 
       {/* HEADER */}
+
       <header
         style={{
           background: "#fff",
+
           borderBottom:
             "1px solid #e9e5de",
-          padding: "17px 20px",
+
+          padding:
+            "17px 20px",
         }}
       >
         <div
@@ -510,7 +580,6 @@ export default async function DistrictPage({
         >
           <Link
             href="/"
-            aria-label="후드의정석 홈"
             style={{
               color: "#171717",
 
@@ -519,8 +588,6 @@ export default async function DistrictPage({
               fontWeight: 900,
 
               fontSize: 22,
-
-              letterSpacing: "-1px",
             }}
           >
             후드의정석
@@ -537,7 +604,8 @@ export default async function DistrictPage({
 
               borderRadius: 8,
 
-              padding: "12px 16px",
+              padding:
+                "12px 16px",
 
               fontWeight: 800,
 
@@ -550,16 +618,18 @@ export default async function DistrictPage({
       </header>
 
       {/* HERO */}
+
       <section
         style={{
           background:
-            "linear-gradient(145deg, #121212 0%, #1f1d1a 100%)",
+            "linear-gradient(145deg,#121212,#211e1a)",
 
           color: "#fff",
 
           textAlign: "center",
 
-          padding: "78px 20px",
+          padding:
+            "78px 20px",
         }}
       >
         <div
@@ -575,11 +645,13 @@ export default async function DistrictPage({
 
               fontWeight: 900,
 
-              letterSpacing: "2.5px",
+              letterSpacing:
+                "2.5px",
 
               fontSize: 11,
 
-              margin: "0 0 15px",
+              margin:
+                "0 0 15px",
             }}
           >
             HOOD MASTER · LOCAL SERVICE
@@ -588,15 +660,17 @@ export default async function DistrictPage({
           <h1
             style={{
               fontSize:
-                "clamp(32px, 6vw, 48px)",
+                "clamp(32px,6vw,48px)",
 
               fontWeight: 900,
 
               lineHeight: 1.28,
 
-              letterSpacing: "-1.5px",
+              letterSpacing:
+                "-1.5px",
 
-              margin: "0 0 18px",
+              margin:
+                "0 0 18px",
             }}
           >
             {name} 후드 교체
@@ -610,7 +684,8 @@ export default async function DistrictPage({
 
               lineHeight: 1.95,
 
-              margin: "0 0 28px",
+              margin:
+                "0 0 28px",
             }}
           >
             주방후드 · 렌지후드 · 후황
@@ -621,21 +696,23 @@ export default async function DistrictPage({
           <a
             href={SITE.phoneHref}
             style={{
-              display: "inline-block",
+              display:
+                "inline-block",
 
-              background: "#ab8247",
+              background:
+                "#ab8247",
 
               color: "#fff",
 
-              textDecoration: "none",
+              textDecoration:
+                "none",
 
               borderRadius: 10,
 
-              padding: "16px 27px",
+              padding:
+                "16px 27px",
 
               fontWeight: 900,
-
-              fontSize: 15,
             }}
           >
             후드 교체 전화상담
@@ -643,7 +720,8 @@ export default async function DistrictPage({
         </div>
       </section>
 
-      {/* MAIN CONTENT */}
+      {/* CONTENT */}
+
       <section
         style={{
           ...container,
@@ -654,14 +732,13 @@ export default async function DistrictPage({
         }}
       >
         {/* BREADCRUMB */}
+
         <nav
           aria-label="현재 위치"
           style={{
             color: "#797979",
 
             fontSize: 13,
-
-            lineHeight: 2,
 
             marginBottom: 32,
           }}
@@ -703,156 +780,50 @@ export default async function DistrictPage({
         </nav>
 
         {/* INTRO */}
-        <article>
-          <p
-            style={{
-              color: "#a78047",
 
-              fontWeight: 900,
+        <h2
+          style={{
+            fontSize: 29,
 
-              fontSize: 12,
+            margin:
+              "0 0 20px",
+          }}
+        >
+          {name} 주방후드·렌지후드 교체
+        </h2>
 
-              letterSpacing: "1.4px",
+        <p
+          style={{
+            color: "#515151",
 
-              margin: "0 0 10px",
-            }}
-          >
-            {name.toUpperCase()} HOOD SERVICE
-          </p>
+            fontSize: 15,
 
-          <h2
-            style={{
-              fontSize: 29,
+            lineHeight: 2,
 
-              lineHeight: 1.4,
+            margin:
+              "0 0 22px",
+          }}
+        >
+          {intro}
+        </p>
 
-              letterSpacing: "-1px",
+        <p
+          style={{
+            color: "#515151",
 
-              margin: "0 0 20px",
-            }}
-          >
-            {name} 주방후드·렌지후드 교체
-          </h2>
+            fontSize: 15,
 
-          <p
-            style={{
-              color: "#515151",
+            lineHeight: 2,
 
-              fontSize: 15,
-
-              lineHeight: 2,
-
-              margin: "0 0 22px",
-            }}
-          >
-            {intro}
-          </p>
-
-          <p
-            style={{
-              color: "#515151",
-
-              fontSize: 15,
-
-              lineHeight: 2,
-
-              margin: "0 0 45px",
-            }}
-          >
-            {detailIntro}
-          </p>
-        </article>
-
-        {/* LOCAL UNIQUE SECTION */}
-        {localProfile && (
-          <section
-            style={{
-              background: "#f1ece3",
-
-              borderRadius: 14,
-
-              padding: "28px 24px",
-
-              marginBottom: 48,
-            }}
-          >
-            <h2
-              style={{
-                fontSize: 24,
-
-                margin: "0 0 15px",
-
-                letterSpacing: "-0.7px",
-              }}
-            >
-              {name} 지역 후드 교체 상담 안내
-            </h2>
-
-            <p
-              style={{
-                color: "#595959",
-
-                fontSize: 14,
-
-                lineHeight: 1.95,
-
-                margin: "0 0 20px",
-              }}
-            >
-              {localProfile.consultationText}
-            </p>
-
-            <p
-              style={{
-                color: "#777",
-
-                fontSize: 12,
-
-                lineHeight: 1.8,
-
-                margin: "0 0 12px",
-              }}
-            >
-              {name} 행정동
-            </p>
-
-            <div
-              style={{
-                display: "flex",
-
-                flexWrap: "wrap",
-
-                gap: 7,
-              }}
-            >
-              {localProfile.neighborhoods.map(
-                (neighborhood) => (
-                  <span
-                    key={neighborhood}
-                    style={{
-                      background: "#fff",
-
-                      border:
-                        "1px solid #ded6ca",
-
-                      borderRadius: 999,
-
-                      padding: "8px 11px",
-
-                      fontSize: 12,
-
-                      color: "#555",
-                    }}
-                  >
-                    {neighborhood}
-                  </span>
-                )
-              )}
-            </div>
-          </section>
-        )}
+            margin:
+              "0 0 45px",
+          }}
+        >
+          {detailIntro}
+        </p>
 
         {/* CASE IMAGE */}
+
         <figure
           style={{
             background: "#fff",
@@ -865,28 +836,32 @@ export default async function DistrictPage({
             overflow: "hidden",
 
             margin:
-              "0 0 55px 0",
+              "0 0 55px",
           }}
         >
           <div
             style={{
-              position: "relative",
+              position:
+                "relative",
 
               width: "100%",
 
-              aspectRatio: "4 / 3",
+              aspectRatio:
+                "4 / 3",
 
-              background: "#ececec",
+              background:
+                "#ececec",
             }}
           >
             <Image
               src={CASE_IMAGE}
-              alt="기존 주방후드를 철거하고 새 후드로 교체한 전후 참고 사진"
+              alt="기존 주방후드를 철거하고 새로운 후드로 교체한 전후 참고 사진"
               fill
               priority
               sizes="(max-width: 768px) 100vw, 1000px"
               style={{
-                objectFit: "contain",
+                objectFit:
+                  "contain",
               }}
             />
           </div>
@@ -905,9 +880,11 @@ export default async function DistrictPage({
 
                 fontSize: 11,
 
-                letterSpacing: "1.5px",
+                letterSpacing:
+                  "1.5px",
 
-                margin: "0 0 8px",
+                margin:
+                  "0 0 8px",
               }}
             >
               HOOD REPLACEMENT CASE
@@ -917,7 +894,8 @@ export default async function DistrictPage({
               style={{
                 fontSize: 23,
 
-                margin: "0 0 13px",
+                margin:
+                  "0 0 13px",
               }}
             >
               주방후드 교체 참고 사례
@@ -939,14 +917,15 @@ export default async function DistrictPage({
               배기덕트 및 전원 상태를
               확인한 뒤 새로운 후드로
               교체한 참고 사례입니다.
-              실제 작업 방법과 필요한
-              부자재는 현장 구조와 제품에
-              따라 달라질 수 있습니다.
+              실제 작업 방법은 제품과
+              현장 구조에 따라 달라질 수
+              있습니다.
             </p>
           </figcaption>
         </figure>
 
         {/* HOUSING */}
+
         <section
           style={{
             marginBottom: 55,
@@ -956,311 +935,11 @@ export default async function DistrictPage({
             style={{
               fontSize: 26,
 
-              margin: "0 0 15px",
+              margin:
+                "0 0 15px",
             }}
           >
-            {name} 아파트·빌라·주택
-            후드 교체
-          </h2>
-
-          {localProfile && (
-            <p
-              style={{
-                color: "#606060",
-
-                fontSize: 14,
-
-                lineHeight: 1.95,
-
-                margin: "0 0 23px",
-              }}
-            >
-              {localProfile.housingText}
-            </p>
-          )}
-
-          <div style={cardGrid}>
-            {housingTypes.map(
-              (item) => (
-                <article
-                  key={item.title}
-                  style={{
-                    background: "#fff",
-
-                    border:
-                      "1px solid #e7e3dc",
-
-                    borderRadius: 12,
-
-                    padding: 23,
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontSize: 18,
-
-                      lineHeight: 1.5,
-
-                      margin:
-                        "0 0 11px",
-                    }}
-                  >
-                    {name} {item.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      color: "#666",
-
-                      fontSize: 14,
-
-                      lineHeight: 1.9,
-
-                      margin: 0,
-                    }}
-                  >
-                    {item.description}
-                  </p>
-                </article>
-              )
-            )}
-          </div>
-        </section>
-
-        {/* HOOD TYPES */}
-        <section
-          style={{
-            marginBottom: 55,
-          }}
-        >
-          <h2
-            style={{
-              fontSize: 26,
-
-              margin: "0 0 22px",
-            }}
-          >
-            {name} 후드 교체 가능 유형
-          </h2>
-
-          <div style={cardGrid}>
-            {hoodTypes.map(
-              (item) => (
-                <article
-                  key={item.title}
-                  style={{
-                    background: "#fff",
-
-                    border:
-                      "1px solid #e7e3dc",
-
-                    borderRadius: 12,
-
-                    padding: 23,
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontSize: 18,
-
-                      margin:
-                        "0 0 11px",
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      color: "#666",
-
-                      fontSize: 14,
-
-                      lineHeight: 1.9,
-
-                      margin: 0,
-                    }}
-                  >
-                    {item.description}
-                  </p>
-                </article>
-              )
-            )}
-          </div>
-        </section>
-
-        {/* CHECKS */}
-        <section
-          style={{
-            marginBottom: 55,
-          }}
-        >
-          <h2
-            style={{
-              fontSize: 26,
-
-              margin: "0 0 22px",
-            }}
-          >
-            {name} 후드 교체 전
-            확인사항
-          </h2>
-
-          <div style={cardGrid}>
-            {checks.map((item) => (
-              <article
-                key={item.number}
-                style={{
-                  background:
-                    "#f1ece3",
-
-                  borderRadius: 12,
-
-                  padding: 23,
-                }}
-              >
-                <p
-                  style={{
-                    color: "#96713e",
-
-                    fontSize: 12,
-
-                    fontWeight: 900,
-
-                    margin:
-                      "0 0 10px",
-                  }}
-                >
-                  CHECK {item.number}
-                </p>
-
-                <h3
-                  style={{
-                    fontSize: 18,
-
-                    margin:
-                      "0 0 11px",
-                  }}
-                >
-                  {item.title}
-                </h3>
-
-                <p
-                  style={{
-                    color: "#626262",
-
-                    fontSize: 14,
-
-                    lineHeight: 1.9,
-
-                    margin: 0,
-                  }}
-                >
-                  {item.description}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* PROCESS */}
-        <section
-          style={{
-            marginBottom: 55,
-          }}
-        >
-          <h2
-            style={{
-              fontSize: 26,
-
-              margin: "0 0 22px",
-            }}
-          >
-            {name} 후드 교체 상담 절차
-          </h2>
-
-          <div style={cardGrid}>
-            {process.map((item) => (
-              <article
-                key={item.number}
-                style={{
-                  background: "#171717",
-
-                  color: "#fff",
-
-                  borderRadius: 12,
-
-                  padding: 23,
-                }}
-              >
-                <p
-                  style={{
-                    color: "#d7b67a",
-
-                    fontSize: 12,
-
-                    fontWeight: 900,
-
-                    margin:
-                      "0 0 10px",
-                  }}
-                >
-                  STEP {item.number}
-                </p>
-
-                <h3
-                  style={{
-                    fontSize: 17,
-
-                    margin:
-                      "0 0 10px",
-                  }}
-                >
-                  {item.title}
-                </h3>
-
-                <p
-                  style={{
-                    color: "#ccc",
-
-                    fontSize: 13,
-
-                    lineHeight: 1.8,
-
-                    margin: 0,
-                  }}
-                >
-                  {item.description}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* IMPORTANT NOTE */}
-        <aside
-          style={{
-            border:
-              "1px solid #ded6ca",
-
-            background: "#fff",
-
-            borderRadius: 12,
-
-            padding: "23px",
-
-            marginBottom: 55,
-          }}
-        >
-          <h2
-            style={{
-              fontSize: 21,
-
-              margin: "0 0 13px",
-            }}
-          >
-            후드 교체 전에 사진을
-            준비해 주세요
+            {name} 아파트·빌라·주택 후드 교체
           </h2>
 
           <p
@@ -1271,19 +950,74 @@ export default async function DistrictPage({
 
               lineHeight: 1.95,
 
-              margin: 0,
+              margin:
+                "0 0 23px",
             }}
           >
-            후드 전체가 보이는 사진,
-            주방가구와 후드가 함께 보이는
-            사진, 제품 모델명이 적힌
-            라벨 사진을 준비하면 기존
-            제품의 형태와 설치 조건을
-            확인하는 데 도움이 됩니다.
+            {housingIntro}
           </p>
-        </aside>
 
-        {/* FAQ */}
+          <div
+            style={cardGrid}
+          >
+            {housingTypes.map(
+              (item) => (
+                <article
+                  key={
+                    item.title
+                  }
+                  style={{
+                    background:
+                      "#fff",
+
+                    border:
+                      "1px solid #e7e3dc",
+
+                    borderRadius:
+                      12,
+
+                    padding: 23,
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontSize:
+                        18,
+
+                      margin:
+                        "0 0 11px",
+                    }}
+                  >
+                    {name}{" "}
+                    {item.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      color:
+                        "#666",
+
+                      fontSize:
+                        14,
+
+                      lineHeight:
+                        1.9,
+
+                      margin: 0,
+                    }}
+                  >
+                    {
+                      item.description
+                    }
+                  </p>
+                </article>
+              )
+            )}
+          </div>
+        </section>
+
+        {/* TYPES */}
+
         <section
           style={{
             marginBottom: 55,
@@ -1293,11 +1027,280 @@ export default async function DistrictPage({
             style={{
               fontSize: 26,
 
-              margin: "0 0 22px",
+              margin:
+                "0 0 22px",
             }}
           >
-            {name} 후드 교체
-            자주 묻는 질문
+            {name} 후드 교체 가능 유형
+          </h2>
+
+          <div
+            style={cardGrid}
+          >
+            {hoodTypes.map(
+              (item) => (
+                <article
+                  key={
+                    item.title
+                  }
+                  style={{
+                    background:
+                      "#fff",
+
+                    border:
+                      "1px solid #e7e3dc",
+
+                    borderRadius:
+                      12,
+
+                    padding: 23,
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontSize:
+                        18,
+
+                      margin:
+                        "0 0 11px",
+                    }}
+                  >
+                    {
+                      item.title
+                    }
+                  </h3>
+
+                  <p
+                    style={{
+                      color:
+                        "#666",
+
+                      fontSize:
+                        14,
+
+                      lineHeight:
+                        1.9,
+
+                      margin: 0,
+                    }}
+                  >
+                    {
+                      item.description
+                    }
+                  </p>
+                </article>
+              )
+            )}
+          </div>
+        </section>
+
+        {/* CHECK */}
+
+        <section
+          style={{
+            marginBottom: 55,
+          }}
+        >
+          <h2
+            style={{
+              fontSize: 26,
+
+              margin:
+                "0 0 22px",
+            }}
+          >
+            {name} 후드 교체 전 확인사항
+          </h2>
+
+          <div
+            style={cardGrid}
+          >
+            {checks.map(
+              (item) => (
+                <article
+                  key={
+                    item.number
+                  }
+                  style={{
+                    background:
+                      "#f1ece3",
+
+                    borderRadius:
+                      12,
+
+                    padding: 23,
+                  }}
+                >
+                  <p
+                    style={{
+                      color:
+                        "#96713e",
+
+                      fontSize:
+                        12,
+
+                      fontWeight:
+                        900,
+
+                      margin:
+                        "0 0 10px",
+                    }}
+                  >
+                    CHECK{" "}
+                    {item.number}
+                  </p>
+
+                  <h3
+                    style={{
+                      fontSize:
+                        18,
+
+                      margin:
+                        "0 0 11px",
+                    }}
+                  >
+                    {
+                      item.title
+                    }
+                  </h3>
+
+                  <p
+                    style={{
+                      color:
+                        "#626262",
+
+                      fontSize:
+                        14,
+
+                      lineHeight:
+                        1.9,
+
+                      margin: 0,
+                    }}
+                  >
+                    {
+                      item.description
+                    }
+                  </p>
+                </article>
+              )
+            )}
+          </div>
+        </section>
+
+        {/* PROCESS */}
+
+        <section
+          style={{
+            marginBottom: 55,
+          }}
+        >
+          <h2
+            style={{
+              fontSize: 26,
+
+              margin:
+                "0 0 22px",
+            }}
+          >
+            {name} 후드 교체 상담 절차
+          </h2>
+
+          <div
+            style={cardGrid}
+          >
+            {process.map(
+              (item) => (
+                <article
+                  key={
+                    item.number
+                  }
+                  style={{
+                    background:
+                      "#171717",
+
+                    color:
+                      "#fff",
+
+                    borderRadius:
+                      12,
+
+                    padding: 23,
+                  }}
+                >
+                  <p
+                    style={{
+                      color:
+                        "#d7b67a",
+
+                      fontSize:
+                        12,
+
+                      fontWeight:
+                        900,
+
+                      margin:
+                        "0 0 10px",
+                    }}
+                  >
+                    STEP{" "}
+                    {item.number}
+                  </p>
+
+                  <h3
+                    style={{
+                      fontSize:
+                        17,
+
+                      margin:
+                        "0 0 10px",
+                    }}
+                  >
+                    {
+                      item.title
+                    }
+                  </h3>
+
+                  <p
+                    style={{
+                      color:
+                        "#ccc",
+
+                      fontSize:
+                        13,
+
+                      lineHeight:
+                        1.8,
+
+                      margin: 0,
+                    }}
+                  >
+                    {
+                      item.description
+                    }
+                  </p>
+                </article>
+              )
+            )}
+          </div>
+        </section>
+
+        {/* FAQ */}
+
+        <section
+          style={{
+            marginBottom: 55,
+          }}
+        >
+          <h2
+            style={{
+              fontSize: 26,
+
+              margin:
+                "0 0 22px",
+            }}
+          >
+            {name} 후드 교체 자주 묻는 질문
           </h2>
 
           <div
@@ -1307,82 +1310,84 @@ export default async function DistrictPage({
               gap: 12,
             }}
           >
-            {faqs.map((faq) => (
-              <details
-                key={faq.question}
-                style={{
-                  background: "#fff",
-
-                  border:
-                    "1px solid #e7e3dc",
-
-                  borderRadius: 10,
-
-                  padding:
-                    "20px 22px",
-                }}
-              >
-                <summary
+            {faqs.map(
+              (faq) => (
+                <details
+                  key={
+                    faq.question
+                  }
                   style={{
-                    cursor: "pointer",
+                    background:
+                      "#fff",
 
-                    fontWeight: 800,
+                    border:
+                      "1px solid #e7e3dc",
 
-                    fontSize: 15,
+                    borderRadius:
+                      10,
 
-                    lineHeight: 1.8,
+                    padding:
+                      "20px 22px",
                   }}
                 >
-                  {faq.question}
-                </summary>
+                  <summary
+                    style={{
+                      cursor:
+                        "pointer",
 
-                <p
-                  style={{
-                    color: "#666",
+                      fontWeight:
+                        800,
 
-                    fontSize: 14,
+                      fontSize:
+                        15,
 
-                    lineHeight: 1.9,
+                      lineHeight:
+                        1.8,
+                    }}
+                  >
+                    {
+                      faq.question
+                    }
+                  </summary>
 
-                    margin:
-                      "15px 0 0",
-                  }}
-                >
-                  {faq.answer}
-                </p>
-              </details>
-            ))}
+                  <p
+                    style={{
+                      color:
+                        "#666",
+
+                      fontSize:
+                        14,
+
+                      lineHeight:
+                        1.9,
+
+                      margin:
+                        "15px 0 0",
+                    }}
+                  >
+                    {
+                      faq.answer
+                    }
+                  </p>
+                </details>
+              )
+            )}
           </div>
         </section>
 
         {/* INTERNAL LINKS */}
+
         <section>
           <h2
             style={{
               fontSize: 24,
 
-              margin: "0 0 12px",
+              margin:
+                "0 0 18px",
             }}
           >
-            {regionData.name} 다른 지역
-            후드 교체
+            {regionData.name} 다른 지역 후드 교체
           </h2>
-
-          <p
-            style={{
-              color: "#707070",
-
-              fontSize: 13,
-
-              lineHeight: 1.8,
-
-              margin: "0 0 18px",
-            }}
-          >
-            인접한 다른 지역의
-            후드 교체 안내도 확인할 수
-            있습니다.
-          </p>
 
           <div
             style={{
@@ -1396,34 +1401,46 @@ export default async function DistrictPage({
             {regionData.districts
               .filter(
                 (item) =>
-                  item.slug !== district
+                  item.slug !==
+                  district
               )
-              .map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/area/${region}/${item.slug}`}
-                  style={{
-                    background: "#fff",
+              .map(
+                (item) => (
+                  <Link
+                    key={
+                      item.slug
+                    }
+                    href={`/area/${region}/${item.slug}`}
+                    style={{
+                      background:
+                        "#fff",
 
-                    border:
-                      "1px solid #e5e5e5",
+                      border:
+                        "1px solid #e5e5e5",
 
-                    padding:
-                      "10px 13px",
+                      padding:
+                        "10px 13px",
 
-                    borderRadius: 7,
+                      borderRadius:
+                        7,
 
-                    color: "#555",
+                      color:
+                        "#555",
 
-                    fontSize: 13,
+                      fontSize:
+                        13,
 
-                    textDecoration:
-                      "none",
-                  }}
-                >
-                  {item.name} 후드 교체
-                </Link>
-              ))}
+                      textDecoration:
+                        "none",
+                    }}
+                  >
+                    {
+                      item.name
+                    }{" "}
+                    후드 교체
+                  </Link>
+                )
+              )}
           </div>
 
           <div
@@ -1434,11 +1451,14 @@ export default async function DistrictPage({
             <Link
               href={`/area/${region}`}
               style={{
-                color: "#96713e",
+                color:
+                  "#96713e",
 
-                fontWeight: 900,
+                fontWeight:
+                  900,
 
-                fontSize: 14,
+                fontSize:
+                  14,
               }}
             >
               ← {regionData.name} 전체 지역 보기
@@ -1448,36 +1468,23 @@ export default async function DistrictPage({
       </section>
 
       {/* CONTACT */}
+
       <section
         style={{
           background: "#f0ece4",
 
           textAlign: "center",
 
-          padding: "65px 20px",
+          padding:
+            "65px 20px",
         }}
       >
-        <p
-          style={{
-            color: "#96713e",
-
-            fontSize: 12,
-
-            fontWeight: 900,
-
-            letterSpacing: "1.5px",
-
-            margin: "0 0 10px",
-          }}
-        >
-          CONTACT
-        </p>
-
         <h2
           style={{
             fontSize: 28,
 
-            margin: "0 0 15px",
+            margin:
+              "0 0 15px",
           }}
         >
           {name} 후드 교체 상담
@@ -1491,30 +1498,37 @@ export default async function DistrictPage({
 
             fontSize: 14,
 
-            margin: "0 0 25px",
+            margin:
+              "0 0 25px",
           }}
         >
           기존 후드 사진과 모델명,
           설치 지역을 알려주시면
-          교체 상담에 도움이 됩니다.
+          상담에 도움이 됩니다.
         </p>
 
         <a
           href={SITE.phoneHref}
           style={{
-            display: "inline-block",
+            display:
+              "inline-block",
 
-            background: "#171717",
+            background:
+              "#171717",
 
             color: "#fff",
 
-            padding: "17px 30px",
+            padding:
+              "17px 30px",
 
-            borderRadius: 9,
+            borderRadius:
+              9,
 
-            fontWeight: 900,
+            fontWeight:
+              900,
 
-            textDecoration: "none",
+            textDecoration:
+              "none",
           }}
         >
           전화상담 {SITE.phone}
@@ -1522,6 +1536,7 @@ export default async function DistrictPage({
       </section>
 
       {/* FOOTER */}
+
       <footer
         style={{
           background: "#151515",
@@ -1550,15 +1565,17 @@ export default async function DistrictPage({
           전국 주방후드 교체 상담
         </div>
 
-        <div>{SITE.phone}</div>
+        <div>
+          {SITE.phone}
+        </div>
 
         <div>
-          © {new Date().getFullYear()}{" "}
-          후드의정석
+          © {new Date().getFullYear()} 후드의정석
         </div>
       </footer>
 
       {/* FIXED CALL */}
+
       <a
         href={SITE.phoneHref}
         aria-label={`${name} 후드 교체 전화상담`}
@@ -1573,21 +1590,27 @@ export default async function DistrictPage({
 
           zIndex: 50,
 
-          background: "#a78047",
+          background:
+            "#a78047",
 
           color: "#fff",
 
-          textAlign: "center",
+          textAlign:
+            "center",
 
-          padding: "17px 20px",
+          padding:
+            "17px 20px",
 
-          borderRadius: 12,
+          borderRadius:
+            12,
 
-          fontWeight: 900,
+          fontWeight:
+            900,
 
           fontSize: 16,
 
-          textDecoration: "none",
+          textDecoration:
+            "none",
 
           boxShadow:
             "0 6px 25px rgba(0,0,0,0.18)",
