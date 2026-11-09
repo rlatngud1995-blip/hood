@@ -5,7 +5,6 @@ import { getAllDistricts } from "../../lib/regions";
 export async function GET() {
   const baseUrl = SITE.url.replace(/\/+$/, "");
 
-  // 1. 기본/서비스 페이지 목록 정의
   const staticItems = [
     {
       url: baseUrl,
@@ -39,17 +38,15 @@ export async function GET() {
     },
   ];
 
-  // 2. 전국 시·군·구 지역별 상세 페이지 동적 추가
   const districtItems = getAllDistricts().map((item) => ({
     url: `${baseUrl}/area/${item.regionSlug}/${item.districtSlug}`,
-    title: `${item.name} 후드 교체 | 후드의정석`,
-    description: `${item.name} 주방후드, 렌지후드, 후황 교체 상담 안내`,
+    title: `${item.districtName} 후드 교체 | 후드의정석`,
+    description: `${item.districtName} 주방후드, 렌지후드, 후황 교체 상담 안내`,
     date: new Date().toUTCString(),
   }));
 
   const allItems = [...staticItems, ...districtItems];
 
-  // 3. XML 형식의 RSS 피드 문자열 생성
   const rssItemsXml = allItems
     .map(
       (item) => `
@@ -76,7 +73,6 @@ export async function GET() {
   </channel>
 </rss>`;
 
-  // 4. XML 응답 반환
   return new NextResponse(rssXml, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
