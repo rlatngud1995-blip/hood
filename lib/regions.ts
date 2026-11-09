@@ -99,14 +99,21 @@ export const regions: Region[] = [
     slug: "incheon",
     name: "인천광역시",
     districts: [
-      { slug: "jung", name: "중구" },
-      { slug: "dong", name: "동구" },
+      // 2026년 7월 행정구역 개편 반영
+      { slug: "jemulpo", name: "제물포구" },
+      { slug: "yeongjong", name: "영종구" },
+      { slug: "seo", name: "서해구" },
+      { slug: "geomdan", name: "검단구" },
+
+      // 기존 URL 보존
+      { slug: "jung", name: "구 중구 지역" },
+      { slug: "dong", name: "구 동구 지역" },
+
       { slug: "michuhol", name: "미추홀구" },
       { slug: "yeonsu", name: "연수구" },
       { slug: "namdong", name: "남동구" },
       { slug: "bupyeong", name: "부평구" },
       { slug: "gyeyang", name: "계양구" },
-      { slug: "seo", name: "서구" },
       { slug: "ganghwa", name: "강화군" },
       { slug: "ongjin", name: "옹진군" },
     ],
@@ -374,8 +381,12 @@ export function getRegion(slug: string) {
   return regions.find((region) => region.slug === slug);
 }
 
-export function getDistrict(regionSlug: string, districtSlug: string) {
+export function getDistrict(
+  regionSlug: string,
+  districtSlug: string
+) {
   const region = getRegion(regionSlug);
+
   return region?.districts.find(
     (district) => district.slug === districtSlug
   );
