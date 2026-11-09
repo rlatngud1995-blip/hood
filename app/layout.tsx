@@ -1,19 +1,55 @@
-import type { Metadata } from "next";
+
+import type {
+  Metadata,
+  Viewport,
+} from "next";
 
 import "./globals.css";
 
+import { SITE } from "../lib/services";
+
+/* =====================================
+   기본 정보
+===================================== */
+
+const SITE_URL = "https://hoodmaster.kr";
+
+const SITE_NAME = "후드의정석";
+
+const SITE_DESCRIPTION =
+  "후드의정석은 전국 주방후드 교체 상담을 제공합니다. " +
+  "렌지후드, 레인지후드, 후황, 빌트인후드, " +
+  "슬림후드, 허리케인후드, 아일랜드후드, " +
+  "침니후드 교체를 안내합니다.";
+
+const FAVICON =
+  "/8F94A388-C771-48E9-9129-4755DEC71A8B.png";
+
+/* =====================================
+   뷰포트 및 테마
+===================================== */
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#171717",
+};
+
+/* =====================================
+   SEO 메타데이터
+===================================== */
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hoodmaster.kr"),
+  metadataBase: new URL(SITE_URL),
 
   title: {
     default: "후드의정석 | 전국 주방후드 교체",
     template: "%s | 후드의정석",
   },
 
-  description:
-    "후드의정석은 전국 주방후드 교체 상담을 제공합니다. " +
-    "렌지후드, 후황, 빌트인후드, 슬림후드, 허리케인후드, " +
-    "아일랜드후드, 침니후드 교체 안내.",
+  description: SITE_DESCRIPTION,
+
+  applicationName: SITE_NAME,
 
   keywords: [
     "후드 교체",
@@ -28,21 +64,28 @@ export const metadata: Metadata = {
     "침니후드 교체",
     "주방 환기후드",
     "가정집 후드 교체",
+    "주방후드 설치",
+    "후드 교체 업체",
   ],
 
   authors: [
     {
-      name: "후드의정석",
-      url: "https://hoodmaster.kr",
+      name: SITE_NAME,
+      url: SITE_URL,
     },
   ],
 
-  creator: "후드의정석",
-  publisher: "후드의정석",
+  creator: SITE_NAME,
 
-  alternates: {
-    canonical: "https://hoodmaster.kr",
-  },
+  publisher: SITE_NAME,
+
+  /*
+   * Canonical은 여기서 고정하지 않습니다.
+   *
+   * 지역별 페이지와 서비스별 페이지에서
+   * 각 페이지의 실제 주소를 canonical로
+   * 설정해야 합니다.
+   */
 
   verification: {
     other: {
@@ -54,45 +97,45 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/8F94A388-C771-48E9-9129-4755DEC71A8B.png",
+        url: FAVICON,
         type: "image/png",
       },
     ],
-    shortcut:
-      "/8F94A388-C771-48E9-9129-4755DEC71A8B.png",
-    apple:
-      "/8F94A388-C771-48E9-9129-4755DEC71A8B.png",
+
+    shortcut: FAVICON,
+
+    apple: FAVICON,
   },
 
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://hoodmaster.kr",
-    siteName: "후드의정석",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+
     title: "후드의정석 | 전국 주방후드 교체",
-    description:
-      "전국 주방후드, 렌지후드, 후황, 아일랜드후드, 침니후드 교체 상담.",
+
+    description: SITE_DESCRIPTION,
+
     images: [
       {
-        url: "/8F94A388-C771-48E9-9129-4755DEC71A8B.png",
-        alt: "후드의정석",
+        url: FAVICON,
+        alt: "후드의정석 로고",
       },
     ],
   },
 
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "후드의정석 | 전국 주방후드 교체",
-    description:
-      "전국 주방후드, 렌지후드, 후황, 아일랜드후드, 침니후드 교체 상담.",
-    images: [
-      "/8F94A388-C771-48E9-9129-4755DEC71A8B.png",
-    ],
+    description: SITE_DESCRIPTION,
+    images: [FAVICON],
   },
 
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -105,50 +148,56 @@ export const metadata: Metadata = {
   category: "주방후드 교체",
 };
 
+/* =====================================
+   구조화 데이터
+===================================== */
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+
+  "@id": `${SITE_URL}/#organization`,
+
+  name: SITE_NAME,
+
+  url: SITE_URL,
+
+  logo: `${SITE_URL}${FAVICON}`,
+
+  telephone: SITE.phone,
+
+  description: SITE_DESCRIPTION,
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+
+  "@id": `${SITE_URL}/#website`,
+
+  url: SITE_URL,
+
+  name: SITE_NAME,
+
+  inLanguage: "ko-KR",
+
+  publisher: {
+    "@id": `${SITE_URL}/#organization`,
+  },
+};
+
+/* =====================================
+   루트 레이아웃
+===================================== */
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": "https://hoodmaster.kr/#organization",
-    name: "후드의정석",
-    url: "https://hoodmaster.kr",
-    logo:
-      "https://hoodmaster.kr/8F94A388-C771-48E9-9129-4755DEC71A8B.png",
-    telephone: "010-9413-4686",
-    description:
-      "전국 주방후드, 렌지후드, 후황, " +
-      "빌트인후드, 아일랜드후드, 침니후드 교체 상담",
-  };
-
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": "https://hoodmaster.kr/#website",
-    url: "https://hoodmaster.kr",
-    name: "후드의정석",
-    inLanguage: "ko-KR",
-    publisher: {
-      "@id": "https://hoodmaster.kr/#organization",
-    },
-  };
-
   return (
     <html lang="ko">
       <head>
-        <meta
-          name="naver-site-verification"
-          content="1d8b2dd6cb5cf4d1fd42092f36c657cd8087e2e3"
-        />
-
-        <meta
-          name="theme-color"
-          content="#171717"
-        />
-
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
