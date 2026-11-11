@@ -46,6 +46,17 @@ export const regions: Region[] = [
     slug: "gyeonggi",
     name: "경기도",
     districts: [
+      // 시 단위 대표 페이지
+      { slug: "suwon", name: "수원시" },
+      { slug: "seongnam", name: "성남시" },
+      { slug: "goyang", name: "고양시" },
+      { slug: "yongin", name: "용인시" },
+      { slug: "bucheon", name: "부천시" },
+      { slug: "ansan", name: "안산시" },
+      { slug: "anyang", name: "안양시" },
+      { slug: "hwaseong", name: "화성시" },
+
+      // 기존 구 단위 페이지 유지
       { slug: "suwon-jangan", name: "수원시 장안구" },
       { slug: "suwon-gwonseon", name: "수원시 권선구" },
       { slug: "suwon-paldal", name: "수원시 팔달구" },
@@ -99,16 +110,12 @@ export const regions: Region[] = [
     slug: "incheon",
     name: "인천광역시",
     districts: [
-      // 2026년 7월 행정구역 개편 반영
       { slug: "jemulpo", name: "제물포구" },
       { slug: "yeongjong", name: "영종구" },
       { slug: "seo", name: "서해구" },
       { slug: "geomdan", name: "검단구" },
-
-      // 기존 URL 보존
       { slug: "jung", name: "구 중구 지역" },
       { slug: "dong", name: "구 동구 지역" },
-
       { slug: "michuhol", name: "미추홀구" },
       { slug: "yeonsu", name: "연수구" },
       { slug: "namdong", name: "남동구" },
