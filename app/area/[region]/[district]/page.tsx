@@ -20,6 +20,10 @@ type PageProps = {
 
 export const dynamicParams = false;
 
+/* =========================================================
+   지역 페이지 정적 생성
+========================================================= */
+
 export function generateStaticParams() {
   return getAllDistricts().map((item) => ({
     region: item.regionSlug,
@@ -27,12 +31,41 @@ export function generateStaticParams() {
   }));
 }
 
-const CASE_IMAGE =
-  "/ECAD3A3D-6C53-43BF-A443-01A321496AE2.png";
+/* =========================================================
+   지역별 자동 분산할 참고 이미지
+
+   새 사진을 public 폴더에 추가하면
+   아래 배열에 파일명만 추가하면 됨.
+========================================================= */
+
+const CASE_IMAGES = [
+  {
+    src: "/ECAD3A3D-6C53-43BF-A443-01A321496AE2.png",
+    alt: "주방후드 교체 참고 사례",
+    caption: "주방후드 교체 참고 이미지",
+  },
+  {
+    src: "/12B08037-6AD2-4EF2-AB3F-2F9FAA2EE6A2.png",
+    alt: "가정용 주방후드 교체 참고 이미지",
+    caption: "가정용 주방후드 교체 참고 이미지",
+  },
+  {
+    src: "/310B47AA-B344-4A17-9160-AC277DBF595E.png",
+    alt: "아일랜드후드 교체 참고 이미지",
+    caption: "아일랜드후드 교체 참고 이미지",
+  },
+  {
+    src: "/10D74E67-C29E-41AD-85D7-64D8092D6C4D.png",
+    alt: "침니후드 교체 참고 이미지",
+    caption: "침니후드 교체 참고 이미지",
+  },
+] as const;
 
 /* =========================================================
-   안정적인 지역별 변형값 생성
-   같은 URL은 배포할 때마다 항상 같은 결과를 사용
+   URL별 고정 변형 함수
+
+   Math.random()을 사용하지 않음.
+   같은 URL은 항상 같은 문장/사진을 사용.
 ========================================================= */
 
 function hashString(value: string) {
@@ -72,7 +105,7 @@ function rotate<T>(
 }
 
 /* =========================================================
-   TITLE
+   META TITLE
 ========================================================= */
 
 const titleTemplates = [
@@ -93,7 +126,7 @@ const titleTemplates = [
 ];
 
 /* =========================================================
-   DESCRIPTION
+   META DESCRIPTION
 ========================================================= */
 
 const descriptionTemplates = [
@@ -174,7 +207,7 @@ const detailTemplates = [
 ];
 
 /* =========================================================
-   주거유형 소개
+   주거공간 설명
 ========================================================= */
 
 const housingIntroTemplates = [
@@ -222,7 +255,7 @@ const prepareTemplates = [
 ];
 
 /* =========================================================
-   HOOD TYPES
+   후드 종류
 ========================================================= */
 
 const hoodTypes = [
@@ -259,7 +292,7 @@ const hoodTypes = [
 ];
 
 /* =========================================================
-   HOUSING
+   주거형태
 ========================================================= */
 
 const housingTypes = [
@@ -281,7 +314,7 @@ const housingTypes = [
 ];
 
 /* =========================================================
-   CHECK ITEMS
+   체크사항
 ========================================================= */
 
 const checks = [
@@ -318,7 +351,7 @@ const checks = [
 ];
 
 /* =========================================================
-   PROCESS
+   상담과정
 ========================================================= */
 
 const process = [
@@ -345,7 +378,7 @@ const process = [
 ];
 
 /* =========================================================
-   FAQ BANK
+   FAQ
 ========================================================= */
 
 const faqBank = [
@@ -412,7 +445,7 @@ const faqBank = [
 ];
 
 /* =========================================================
-   SECTION TITLE VARIANTS
+   섹션 제목
 ========================================================= */
 
 const typeTitles = [
@@ -453,8 +486,8 @@ const checkTitles = [
   (name: string) =>
     `${name} 렌지후드 상담 전 확인사항`,
 
-  (name: string) =>
-    `후드 교체 전에 확인해 주세요`,
+  () =>
+    "후드 교체 전에 확인해 주세요",
 ];
 
 const processTitles = [
@@ -464,8 +497,8 @@ const processTitles = [
   (name: string) =>
     `${name} 주방후드 교체 상담 절차`,
 
-  (name: string) =>
-    `후드 교체 상담은 이렇게 진행됩니다`,
+  () =>
+    "후드 교체 상담은 이렇게 진행됩니다",
 
   (name: string) =>
     `${name} 렌지후드 상담 순서`,
@@ -478,15 +511,15 @@ const faqTitles = [
   (name: string) =>
     `${name} 주방후드 교체 FAQ`,
 
-  (name: string) =>
-    `후드 교체 상담 전 많이 묻는 질문`,
+  () =>
+    "후드 교체 상담 전 많이 묻는 질문",
 
   (name: string) =>
     `${name} 렌지후드 교체 Q&A`,
 ];
 
 /* =========================================================
-   STYLES
+   STYLE
 ========================================================= */
 
 const container = {
@@ -504,6 +537,9 @@ const grid = {
 
 /* =========================================================
    METADATA
+
+   지역별 선택된 이미지가
+   OpenGraph 이미지에도 자동 반영됨.
 ========================================================= */
 
 export async function generateMetadata({
@@ -533,7 +569,16 @@ export async function generateMetadata({
     districtData.name;
 
   const seed =
-    hashString(`${region}-${district}`);
+    hashString(
+      `${region}-${district}-${name}`
+    );
+
+  const caseImage =
+    pick(
+      CASE_IMAGES,
+      seed,
+      7
+    );
 
   const title =
     pick(
@@ -569,28 +614,28 @@ export async function generateMetadata({
       googleBot: {
         index: true,
         follow: true,
-        "max-image-preview":
-          "large",
+        "max-image-preview": "large",
         "max-snippet": -1,
         "max-video-preview": -1,
       },
     },
 
     openGraph: {
+      type: "website",
+      locale: "ko_KR",
+      siteName: SITE.name,
+
       title,
       description,
       url: canonical,
-      siteName: SITE.name,
-      locale: "ko_KR",
-      type: "website",
 
       images: [
         {
           url:
-            `${SITE.url}${CASE_IMAGE}`,
+            `${SITE.url}${caseImage.src}`,
 
           alt:
-            "주방후드 교체 전후 참고 사진",
+            caseImage.alt,
         },
       ],
     },
@@ -629,6 +674,19 @@ export default async function DistrictPage({
   const seed =
     hashString(
       `${region}-${district}-${name}`
+    );
+
+  /* =======================================================
+     지역별 고정 사진 선택
+
+     같은 지역은 항상 같은 사진.
+  ======================================================= */
+
+  const caseImage =
+    pick(
+      CASE_IMAGES,
+      seed,
+      7
     );
 
   const intro =
@@ -736,12 +794,15 @@ export default async function DistrictPage({
         )
     );
 
-  /*
-    섹션 순서도 지역별로 다르게 구성
-  */
-
   const layoutVariant =
     seed % 3;
+
+  /* =======================================================
+     STRUCTURED DATA
+
+     사진도 지역별 선택 이미지와 동일하게 연결.
+     실제 지역 시공이라고 거짓 표기하지 않음.
+  ======================================================= */
 
   const schema = {
     "@context": "https://schema.org",
@@ -788,13 +849,13 @@ export default async function DistrictPage({
           `${pageUrl}#image`,
 
         url:
-          `${SITE.url}${CASE_IMAGE}`,
+          `${SITE.url}${caseImage.src}`,
 
         contentUrl:
-          `${SITE.url}${CASE_IMAGE}`,
+          `${SITE.url}${caseImage.src}`,
 
         caption:
-          "주방후드 교체 전후 참고 사례",
+          caseImage.caption,
       },
 
       {
@@ -809,6 +870,9 @@ export default async function DistrictPage({
 
         serviceType:
           "주방후드 교체",
+
+        description:
+          `${location} 주방후드·렌지후드 교체 상담 안내`,
 
         provider: {
           "@type":
@@ -856,6 +920,7 @@ export default async function DistrictPage({
             item:
               SITE.url,
           },
+
           {
             "@type":
               "ListItem",
@@ -868,6 +933,7 @@ export default async function DistrictPage({
             item:
               `${SITE.url}/area`,
           },
+
           {
             "@type":
               "ListItem",
@@ -880,6 +946,7 @@ export default async function DistrictPage({
             item:
               `${SITE.url}/area/${region}`,
           },
+
           {
             "@type":
               "ListItem",
@@ -896,6 +963,10 @@ export default async function DistrictPage({
       },
     ],
   };
+
+  /* =======================================================
+     HOUSING SECTION
+  ======================================================= */
 
   const HousingSection = (
     <section
@@ -930,20 +1001,16 @@ export default async function DistrictPage({
               key={item.title}
               style={{
                 background: "#fff",
-
                 border:
                   "1px solid #e7e3dc",
-
                 borderRadius: 12,
-
                 padding: 23,
               }}
             >
               <h3
                 style={{
                   fontSize: 18,
-                  margin:
-                    "0 0 11px",
+                  margin: "0 0 11px",
                 }}
               >
                 {name} {item.title}
@@ -965,6 +1032,10 @@ export default async function DistrictPage({
       </div>
     </section>
   );
+
+  /* =======================================================
+     TYPE SECTION
+  ======================================================= */
 
   const TypeSection = (
     <section
@@ -988,20 +1059,16 @@ export default async function DistrictPage({
               key={item.title}
               style={{
                 background: "#fff",
-
                 border:
                   "1px solid #e7e3dc",
-
                 borderRadius: 12,
-
                 padding: 23,
               }}
             >
               <h3
                 style={{
                   fontSize: 18,
-                  margin:
-                    "0 0 11px",
+                  margin: "0 0 11px",
                 }}
               >
                 {item.title}
@@ -1023,6 +1090,10 @@ export default async function DistrictPage({
       </div>
     </section>
   );
+
+  /* =======================================================
+     CHECK SECTION
+  ======================================================= */
 
   const CheckSection = (
     <section
@@ -1047,9 +1118,7 @@ export default async function DistrictPage({
               style={{
                 background:
                   "#f1ece3",
-
                 borderRadius: 12,
-
                 padding: 23,
               }}
             >
@@ -1058,9 +1127,11 @@ export default async function DistrictPage({
                   color:
                     "#96713e",
 
-                  fontSize: 12,
+                  fontSize:
+                    12,
 
-                  fontWeight: 900,
+                  fontWeight:
+                    900,
 
                   margin:
                     "0 0 10px",
@@ -1084,9 +1155,11 @@ export default async function DistrictPage({
                   color:
                     "#626262",
 
-                  fontSize: 14,
+                  fontSize:
+                    14,
 
-                  lineHeight: 1.9,
+                  lineHeight:
+                    1.9,
 
                   margin: 0,
                 }}
@@ -1103,15 +1176,9 @@ export default async function DistrictPage({
   return (
     <main
       style={{
-        minHeight:
-          "100vh",
-
-        background:
-          "#faf9f6",
-
-        color:
-          "#171717",
-
+        minHeight: "100vh",
+        background: "#faf9f6",
+        color: "#171717",
         fontFamily:
           "'Pretendard', 'Noto Sans KR', Arial, sans-serif",
       }}
@@ -1133,12 +1200,9 @@ export default async function DistrictPage({
 
       <header
         style={{
-          background:
-            "#fff",
-
+          background: "#fff",
           borderBottom:
             "1px solid #e9e5de",
-
           padding:
             "17px 20px",
         }}
@@ -1220,7 +1284,8 @@ export default async function DistrictPage({
           background:
             "linear-gradient(145deg,#121212,#211e1a)",
 
-          color: "#fff",
+          color:
+            "#fff",
 
           textAlign:
             "center",
@@ -1345,6 +1410,8 @@ export default async function DistrictPage({
             70,
         }}
       >
+        {/* BREADCRUMB */}
+
         <nav
           aria-label="현재 위치"
           style={{
@@ -1450,7 +1517,7 @@ export default async function DistrictPage({
           {detail}
         </p>
 
-        {/* CASE */}
+        {/* 지역별 자동 선택 이미지 */}
 
         <figure
           style={{
@@ -1487,9 +1554,11 @@ export default async function DistrictPage({
           >
             <Image
               src={
-                CASE_IMAGE
+                caseImage.src
               }
-              alt="기존 주방후드를 철거하고 새 후드로 교체한 전후 참고 사진"
+              alt={
+                caseImage.alt
+              }
               fill
               priority
               sizes="(max-width: 768px) 100vw, 1000px"
@@ -1524,7 +1593,7 @@ export default async function DistrictPage({
                   "0 0 8px",
               }}
             >
-              HOOD REPLACEMENT CASE
+              HOOD REPLACEMENT REFERENCE
             </p>
 
             <h2
@@ -1536,7 +1605,7 @@ export default async function DistrictPage({
                   "0 0 13px",
               }}
             >
-              주방후드 교체 참고 사례
+              {caseImage.caption}
             </h2>
 
             <p
@@ -1550,18 +1619,14 @@ export default async function DistrictPage({
                 lineHeight:
                   1.95,
 
-                margin:
-                  0,
+                margin: 0,
               }}
             >
-              기존 주방후드를 철거하고
-              설치 공간과 제품 규격,
-              배기덕트와 전원 상태를
-              확인한 뒤 새로운 후드를
-              설치한 참고 사례입니다.
-              실제 작업은 제품 종류와
-              현장 구조에 따라 달라질 수
-              있습니다.
+              후드 교체 작업을 이해하기 위한
+              참고 이미지입니다. 실제 교체 제품과
+              작업 방법은 기존 후드의 종류,
+              설치 공간, 주방가구와 배기덕트
+              구조에 따라 달라질 수 있습니다.
             </p>
           </figcaption>
         </figure>
@@ -1635,7 +1700,8 @@ export default async function DistrictPage({
               lineHeight:
                 1.9,
 
-              margin: 0,
+              margin:
+                0,
             }}
           >
             {prepare.description}
@@ -1662,9 +1728,7 @@ export default async function DistrictPage({
             {processTitle}
           </h2>
 
-          <div
-            style={grid}
-          >
+          <div style={grid}>
             {pageProcess.map(
               (item, index) => (
                 <article
@@ -1700,8 +1764,7 @@ export default async function DistrictPage({
                         "0 0 10px",
                     }}
                   >
-                    STEP{" "}
-                    {index + 1}
+                    STEP {index + 1}
                   </p>
 
                   <h3
@@ -1713,9 +1776,7 @@ export default async function DistrictPage({
                         "0 0 10px",
                     }}
                   >
-                    {
-                      item.title
-                    }
+                    {item.title}
                   </h3>
 
                   <p
@@ -1733,9 +1794,7 @@ export default async function DistrictPage({
                         0,
                     }}
                   >
-                    {
-                      item.description
-                    }
+                    {item.description}
                   </p>
                 </article>
               )
@@ -1807,9 +1866,7 @@ export default async function DistrictPage({
                         1.8,
                     }}
                   >
-                    {
-                      faq.question
-                    }
+                    {faq.question}
                   </summary>
 
                   <p
@@ -1827,9 +1884,7 @@ export default async function DistrictPage({
                         "15px 0 0",
                     }}
                   >
-                    {
-                      faq.answer
-                    }
+                    {faq.answer}
                   </p>
                 </details>
               )
@@ -2043,9 +2098,7 @@ export default async function DistrictPage({
         </div>
 
         <div>
-          ©{" "}
-          {new Date().getFullYear()}{" "}
-          후드의정석
+          © {new Date().getFullYear()} 후드의정석
         </div>
       </footer>
 
